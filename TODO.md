@@ -52,6 +52,8 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] UI de démo (page unique servie sur `/` : ingestion + chat tutor/quiz/plan)
 
 ## Phase 5 — Déploiement
-- [ ] Pipeline déploiement Cloud Run + canary + smoke tests
-- [ ] Scans sécurité (pip-audit, Trivy) + secrets manager
-- [ ] Conformité RGPD (rétention, effacement) + runbook
+- [x] Pipeline déploiement Cloud Run (canary `--no-traffic`) + smoke test + promotion
+- [x] Manifeste Cloud Run (`infra/cloudrun.yaml`)
+- [ ] Branchement réel GCP (Workload Identity, Secret Manager)
+- [ ] Scan d'image (Trivy) + pip-audit
+- [x] Conformité RGPD (effacement cours & étudiant) — rétention/runbook à compléter

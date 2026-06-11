@@ -6,6 +6,10 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
+### Added
+- Phase 5 (déploiement) : workflow `deploy.yml` (Cloud Run, opt-in via `DEPLOY_ENABLED`,
+  build+push image, déploiement canary `--no-traffic`, smoke test, promotion du trafic),
+  `scripts/smoke_test.py` (`make smoke`) et manifeste `infra/cloudrun.yaml`.
 
 ## [0.5.0] - 2026-06-11
 ### Added

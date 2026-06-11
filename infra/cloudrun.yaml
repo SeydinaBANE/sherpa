@@ -1,0 +1,56 @@
+# Manifeste Cloud Run (Knative) — gabarit. Remplacer PROJECT / REGION / secrets.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: sherpa-api
+  labels:
+    app: sherpa
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+    spec:
+      containerConcurrency: 40
+      timeoutSeconds: 60
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT/sherpa/api:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          env:
+            - name: SHERPA_ENV
+              value: production
+            - name: SHERPA_LLM_BACKEND
+              value: anthropic
+            - name: SHERPA_RETRIEVAL_BACKEND
+              value: hybrid
+            - name: SHERPA_MEMORY_BACKEND
+              value: sql
+            - name: SHERPA_CACHE_BACKEND
+              value: redis
+            - name: SHERPA_AUTH_ENABLED
+              value: "true"
+            - name: SHERPA_RATE_LIMIT_ENABLED
+              value: "true"
+            # Secrets injectés depuis Secret Manager (clés API, URLs DB/Redis/Qdrant)
+            - name: SHERPA_ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sherpa-anthropic-api-key
+                  key: latest
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            failureThreshold: 10
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            periodSeconds: 30

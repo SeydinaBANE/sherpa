@@ -30,6 +30,8 @@
 - ✅ Cache LLM (`CachingLLM`) + cache des embeddings (`CachingEmbedding`), in-memory/Redis.
 - ✅ Quotas par utilisateur (`DailyRequestQuota`).
 
-## Phase 5 — Déploiement ⬜
-- CI/CD complet, scans sécurité (deps, image, secrets), conformité RGPD.
-- Déploiement GCP Cloud Run, canary + smoke tests, runbook on-call.
+## Phase 5 — Déploiement 🔶
+- ✅ Pipeline de déploiement (`deploy.yml`) : Cloud Run, canary `--no-traffic`, smoke test, promotion.
+- ✅ Smoke test (`scripts/smoke_test.py`) + manifeste `infra/cloudrun.yaml`.
+- ⬜ Branchement réel GCP (Workload Identity, Secret Manager) + scan d'image (Trivy).
+- ⬜ Canary monitoring & runbook on-call.

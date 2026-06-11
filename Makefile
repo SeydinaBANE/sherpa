@@ -40,6 +40,9 @@ evals: ## Lance les évaluations RAG (golden set)
 judge: ## Lance l'évaluation LLM-judge (backend anthropic requis)
 	$(PY) -m evals.judge_run
 
+smoke: ## Smoke test contre une URL déployée (BASE_URL=...)
+	$(PY) scripts/smoke_test.py --base-url $(BASE_URL)
+
 migrate: ## Applique les migrations Alembic (Postgres)
 	$(VENV)/bin/alembic upgrade head
 

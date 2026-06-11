@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    # Opt-in : définir la variable de dépôt DEPLOY_ENABLED=true et les secrets GCP.
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      SERVICE: sherpa-api
+      REGION: ${{ vars.GCP_REGION }}
+      IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/sherpa/api:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build & push image
+        run: |
+          gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+          docker build -f docker/Dockerfile -t "$IMAGE" .
+          docker push "$IMAGE"
+
+      - id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}
+          # canary : 10 % du trafic vers la nouvelle révision
+          flags: --no-traffic
+        # secrets/env applicatifs gérés côté Cloud Run (Secret Manager)
+
+      - name: Smoke test (nouvelle révision)
+        run: |
+          python -m pip install --quiet httpx
+          python scripts/smoke_test.py --base-url "${{ steps.deploy.outputs.url }}"
+
+      - name: Promote traffic to 100%
+        run: |
+          gcloud run services update-traffic "$SERVICE" \
+            --region "$REGION" --to-latest
