@@ -22,8 +22,14 @@ qualité **fonctionnelle** sur un jeu de données de référence (golden set), e
 Sortie : `grounding=1.00 keyword_recall=1.00 n=2` + code de sortie non nul si échec
 (seuils bloquants en CI).
 
-## Évolution (Phase 3)
+## LLM-judge ✅
 
-- **RAGAS** : faithfulness, answer relevancy, context relevancy/recall.
-- **LLM-judge** (Claude Opus) pour la qualité pédagogique (clarté, exactitude).
+`evals/judge.py` — `LLMJudge` note la **fidélité** d'une réponse au contexte (sortie JSON
+validée : `faithful`, `score` 1–5, `rationale`). Runner `evals/judge_run.py` (`make judge`)
+évalue le golden set et applique un seuil ; il **s'active avec le backend `anthropic`** et
+s'ignore proprement sinon (CI offline reste verte). Logique testée hors-ligne via un faux juge.
+
+## Évolution
+
+- **RAGAS** : answer/context relevancy, recall.
 - Dataset enrichi + suivi des régressions par PR.

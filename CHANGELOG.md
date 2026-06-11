@@ -7,6 +7,13 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-11
+### Added
+- LLM-judge pour les évaluations : `evals/judge.py` (`LLMJudge` + `JudgeVerdict`, JSON validé)
+  et runner `evals/judge_run.py` (`make judge`), actif sur le backend `anthropic`, ignoré sinon.
+- Quota journalier par utilisateur : `DailyRequestQuota` + dépendance `enforce_quota`
+  (off par défaut, `SHERPA_QUOTA_ENABLED` / `SHERPA_DAILY_REQUEST_QUOTA`) → `429`.
+
 ## [0.4.0] - 2026-06-11
 ### Added
 - Persistance des métadonnées de chunks : `ChunkMetadataPort` + adapters `InMemoryChunkMetadata`
@@ -75,7 +82,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Docker multi-stage, docker-compose (qdrant / postgres / redis), CI GitHub Actions.
 - Documentation complète (PROJECT, ROADMAP, docs/*, ADR).
 
-[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.1.0...v0.2.0

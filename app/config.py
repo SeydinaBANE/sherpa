@@ -88,6 +88,8 @@ class Settings(BaseSettings):
     rate_limit_enabled: bool = False
     rate_limit_requests: int = Field(default=60, gt=0)
     rate_limit_window_seconds: int = Field(default=60, gt=0)
+    quota_enabled: bool = False
+    daily_request_quota: int = Field(default=1000, gt=0)
 
     @property
     def is_production(self) -> bool:
