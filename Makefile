@@ -37,6 +37,9 @@ cov: ## Lance les tests avec couverture
 evals: ## Lance les évaluations RAG (golden set)
 	$(PY) -m evals.run
 
+migrate: ## Applique les migrations Alembic (Postgres)
+	$(VENV)/bin/alembic upgrade head
+
 precommit: ## Lance tous les hooks pre-commit
 	$(VENV)/bin/pre-commit run --all-files
 

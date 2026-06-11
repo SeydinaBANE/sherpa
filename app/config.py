@@ -11,6 +11,21 @@ class Environment(StrEnum):
     PRODUCTION = "production"
 
 
+class RetrievalBackend(StrEnum):
+    MEMORY = "memory"
+    HYBRID = "hybrid"
+
+
+class LLMBackend(StrEnum):
+    ECHO = "echo"
+    ANTHROPIC = "anthropic"
+
+
+class MemoryBackend(StrEnum):
+    MEMORY = "memory"
+    SQL = "sql"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="SHERPA_",
@@ -32,8 +47,14 @@ class Settings(BaseSettings):
     voyage_api_key: str = ""
     embedding_model: str = "voyage-3"
 
+    retrieval_backend: RetrievalBackend = RetrievalBackend.MEMORY
+    llm_backend: LLMBackend = LLMBackend.ECHO
+    memory_backend: MemoryBackend = MemoryBackend.MEMORY
+
     qdrant_url: str = "http://localhost:6333"
     qdrant_collection: str = "sherpa_chunks"
+    rrf_k: int = Field(default=60, gt=0)
+    top_k: int = Field(default=4, gt=0)
 
     database_url: str = "postgresql+psycopg://sherpa:sherpa@localhost:5432/sherpa"
     redis_url: str = "redis://localhost:6379/0"
@@ -44,6 +65,12 @@ class Settings(BaseSettings):
 
     max_tokens_per_request: int = Field(default=4096, gt=0)
     daily_token_budget: int = Field(default=1_000_000, gt=0)
+
+    llm_max_retries: int = Field(default=3, ge=1)
+    llm_retry_base_delay: float = Field(default=0.2, ge=0)
+    llm_timeout_seconds: float = Field(default=30.0, gt=0)
+    breaker_failure_threshold: int = Field(default=5, ge=1)
+    breaker_reset_timeout: float = Field(default=30.0, gt=0)
 
     @property
     def is_production(self) -> bool:

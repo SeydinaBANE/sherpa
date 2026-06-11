@@ -7,7 +7,7 @@ COPY pyproject.toml README.md ./
 COPY app ./app
 RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install --upgrade pip \
-    && /opt/venv/bin/pip install ".[rag,data,observability]"
+    && /opt/venv/bin/pip install ".[rag,data,observability,agents]"
 
 FROM python:3.11-slim AS runtime
 ENV PATH="/opt/venv/bin:$PATH" \

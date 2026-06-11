@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sherpa"
-version = "0.1.0"
+version = "0.2.0"
 description = "Sherpa — Tuteur IA pour la préparation d'examens (RAG + agents, production-grade)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -17,6 +17,7 @@ dependencies = [
     "uvicorn[standard]>=0.32",
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
+    "python-multipart>=0.0.12",
     "structlog>=24.4",
     "httpx>=0.27",
     "tenacity>=9.0",
@@ -31,7 +32,7 @@ rag = [
     "pymupdf>=1.24",
 ]
 data = [
-    "sqlalchemy>=2.0",
+    "sqlalchemy[asyncio]>=2.0",
     "alembic>=1.14",
     "psycopg[binary]>=3.2",
     "redis>=5.2",
@@ -39,6 +40,9 @@ data = [
 observability = [
     "prometheus-client>=0.21",
     "langfuse>=2.53",
+]
+agents = [
+    "langgraph>=0.2",
 ]
 dev = [
     "pytest>=8.3",
@@ -49,6 +53,10 @@ dev = [
     "pre-commit>=4.0",
     "bandit>=1.8",
     "types-redis>=4.6",
+    "langgraph>=0.2",
+    "sqlalchemy[asyncio]>=2.0",
+    "aiosqlite>=0.20",
+    "prometheus-client>=0.21",
 ]
 
 [project.urls]
@@ -91,7 +99,16 @@ no_implicit_reexport = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["qdrant_client.*", "voyageai.*", "rank_bm25.*", "fitz.*", "langfuse.*"]
+module = [
+    "qdrant_client.*",
+    "voyageai.*",
+    "anthropic.*",
+    "langgraph.*",
+    "rank_bm25.*",
+    "fitz.*",
+    "langfuse.*",
+    "prometheus_client.*",
+]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

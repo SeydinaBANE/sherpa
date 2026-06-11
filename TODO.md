@@ -14,27 +14,41 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Documentation complète
 
 ## Phase 1 — Ingestion + RAG production
-- [ ] Adapter `QdrantRetriever` (implémente `RetrieverPort`)
-- [ ] Adapter `VoyageEmbedding` (implémente `EmbeddingPort`)
-- [ ] Adapter `AnthropicLLM` (implémente `LLMPort`, routing multi-modèle)
-- [ ] Parsing PDF (PyMuPDF) + chunking sémantique
-- [ ] Retrieval hybride (dense + BM25) + RRF + reranking
-- [ ] Persistance métadonnées chunks (Postgres + Alembic)
+- [x] Adapter `QdrantRetriever` (implémente `RetrieverPort`)
+- [x] Adapter `VoyageEmbedding` (implémente `EmbeddingPort`)
+- [x] Adapter `AnthropicLLM` (implémente `LLMPort`, routing multi-modèle)
+- [x] Parsing PDF (PyMuPDF) / txt / md (`load_text`)
+- [x] Retrieval hybride (dense + sparse) + fusion RRF
+- [x] Switch de backend par config + wiring
+- [x] Endpoint d'upload de fichier (multipart) branché sur `load_bytes`
+- [ ] Test d'intégration Qdrant (testcontainers)
+- [ ] Reranking cross-encoder
+- [x] Persistance (Postgres + Alembic) — mémoire étudiant `study_events`
+- [ ] Persistance métadonnées chunks (Postgres)
 
 ## Phase 2 — Agents
-- [ ] Graphe LangGraph + état + checkpointer Postgres
-- [ ] Agents `quiz_generator`, `study_planner`, `weakness_diagnoser`
-- [ ] Mémoire étudiant (suivi des lacunes)
+- [x] Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés + JSON validé)
+- [x] Endpoints `/agents/quiz`, `/agents/study-plan`, `/agents/diagnose`
+- [x] Câblage LangGraph (`AssistantOrchestrator` + endpoint `/assistant`)
+- [ ] Routing d'intention par LLM (fallback règles)
+- [x] Mémoire étudiant persistée (`study_events`) + `diagnose-from-history`
+- [ ] Checkpointer LangGraph Postgres (état conversationnel)
 
 ## Phase 3 — Evals + Observabilité
+- [x] Métriques Prometheus (`/metrics`) + middleware request-id + access logging
+- [ ] Traces LLM Langfuse (coûts/latence par appel)
+- [ ] Dashboards Grafana + SLO/SLI + alerting
 - [ ] Intégration RAGAS + LLM-judge (Claude Opus)
 - [ ] Dataset d'eval versionné + seuils bloquants en CI
-- [ ] Langfuse + Prometheus/Grafana + SLO/SLI + alerting
 
 ## Phase 4 — Optimisation & résilience
+- [x] Retries/backoff, circuit breaker, timeout (`ResilientLLM`)
+- [x] Budget de tokens quotidien (`DailyTokenBudget` → 429)
 - [ ] Cache Redis + batching embeddings
-- [ ] Retries/backoff, circuit breaker (tenacity)
-- [ ] Quotas par utilisateur + budgets coûts
+- [ ] Quotas par utilisateur
+
+## Démo
+- [x] UI de démo (page unique servie sur `/` : ingestion + chat tutor/quiz/plan)
 
 ## Phase 5 — Déploiement
 - [ ] Pipeline déploiement Cloud Run + canary + smoke tests

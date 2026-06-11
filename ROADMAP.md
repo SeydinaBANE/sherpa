@@ -13,17 +13,22 @@
 - Retrieval hybride (dense + BM25), fusion RRF, reranking.
 - Adapter Claude (routing multi-modèle) en remplacement de `EchoLLM`.
 
-## Phase 2 — Agents ⬜
-- LangGraph : `tutor`, `quiz_generator`, `study_planner`, `weakness_diagnoser`.
-- Mémoire étudiant persistée (checkpointer Postgres).
+## Phase 2 — Agents 🔶
+- ✅ Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés, JSON validé) + endpoints.
+- ✅ Câblage LangGraph (`AssistantOrchestrator`, routing d'intention, endpoint `/assistant`).
+- ✅ Mémoire étudiant persistée (`StudyMemoryPort`, SQLAlchemy + Alembic, `diagnose-from-history`).
+- ⬜ Checkpointer LangGraph Postgres (état conversationnel).
 
-## Phase 3 — Evals + Observabilité ⬜
-- RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.
-- Langfuse (traces, coûts) + Prometheus/Grafana (latence, throughput), SLO/SLI.
+## Phase 3 — Evals + Observabilité 🔶
+- ✅ Métriques Prometheus (`/metrics`) + middleware request-id + access logging structuré.
+- ⬜ Langfuse (traces LLM, coûts).
+- ⬜ RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.
+- ⬜ Dashboards Grafana + SLO/SLI + alerting.
 
-## Phase 4 — Optimisation & résilience ⬜
-- Cache Redis (réponses/embeddings), batching embeddings.
-- Retries/backoff, circuit breaker, quotas & budgets coûts.
+## Phase 4 — Optimisation & résilience 🔶
+- ✅ Retries/backoff, circuit breaker, timeout (`ResilientLLM`) + budget tokens (`DailyTokenBudget`).
+- ⬜ Cache Redis (réponses/embeddings), batching embeddings.
+- ⬜ Quotas par utilisateur.
 
 ## Phase 5 — Déploiement ⬜
 - CI/CD complet, scans sécurité (deps, image, secrets), conformité RGPD.
