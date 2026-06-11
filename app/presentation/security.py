@@ -6,7 +6,8 @@ from fastapi import Depends, Header, HTTPException, Request, status
 
 from app.config import get_settings
 from app.infrastructure.ratelimit.in_memory import FixedWindowRateLimiter
-from app.presentation.dependencies import get_rate_limiter
+from app.infrastructure.ratelimit.quota import DailyRequestQuota
+from app.presentation.dependencies import get_rate_limiter, get_request_quota
 
 
 async def require_api_key(
@@ -42,4 +43,19 @@ async def rate_limit(
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Trop de requêtes, réessayez plus tard",
+        )
+
+
+async def enforce_quota(
+    request: Request,
+    quota: Annotated[DailyRequestQuota, Depends(get_request_quota)],
+    x_api_key: Annotated[str | None, Header(alias="X-API-Key")] = None,
+) -> None:
+    settings = get_settings()
+    if not settings.quota_enabled:
+        return
+    if not quota.allow(_client_identity(request, x_api_key)):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Quota journalier dépassé",
         )

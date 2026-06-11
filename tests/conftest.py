@@ -18,6 +18,7 @@ def _clear_caches() -> None:
     dependencies._get_session_factory.cache_clear()
     dependencies.get_cache.cache_clear()
     dependencies.get_rate_limiter.cache_clear()
+    dependencies.get_request_quota.cache_clear()
     dependencies.get_assistant_orchestrator.cache_clear()
 
 

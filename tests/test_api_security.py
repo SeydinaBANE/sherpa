@@ -62,6 +62,23 @@ async def test_valid_key_passes_auth(_auth_env: None) -> None:
         assert ok.status_code == 200
 
 
+@pytest.fixture
+def _quota_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("SHERPA_QUOTA_ENABLED", "true")
+    monkeypatch.setenv("SHERPA_DAILY_REQUEST_QUOTA", "2")
+
+
+async def test_daily_quota_blocks_after_threshold(_quota_env: None) -> None:
+    async for client in _client():
+        first = await client.post("/ask", json={"course_id": "x", "question": "q ?"})
+        second = await client.post("/ask", json={"course_id": "x", "question": "q ?"})
+        third = await client.post("/ask", json={"course_id": "x", "question": "q ?"})
+        assert first.status_code in (200, 422)
+        assert second.status_code in (200, 422)
+        assert third.status_code == 429
+        assert (await client.get("/healthz")).status_code == 200  # public, hors quota
+
+
 async def test_rate_limit_blocks_after_threshold(_rate_env: None) -> None:
     async for client in _client():
         assert (await client.get("/healthz")).status_code == 200  # public, non limité

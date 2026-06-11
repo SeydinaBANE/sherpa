@@ -46,7 +46,7 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Budget de tokens quotidien (`DailyTokenBudget` → 429)
 - [x] Cache LLM (`CachePort` + `CachingLLM`, in-memory/Redis)
 - [x] Cache des embeddings (`CachingEmbedding`, batch des manquants)
-- [ ] Quotas par utilisateur
+- [x] Quotas par utilisateur (`DailyRequestQuota` → 429)
 
 ## Démo
 - [x] UI de démo (page unique servie sur `/` : ingestion + chat tutor/quiz/plan)

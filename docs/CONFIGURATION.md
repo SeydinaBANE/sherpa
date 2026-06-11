@@ -21,6 +21,8 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 | `SHERPA_RATE_LIMIT_ENABLED` | `false` | Active le rate-limiting (fenêtre fixe) |
 | `SHERPA_RATE_LIMIT_REQUESTS` | `60` | Requêtes autorisées par fenêtre |
 | `SHERPA_RATE_LIMIT_WINDOW_SECONDS` | `60` | Durée de la fenêtre |
+| `SHERPA_QUOTA_ENABLED` | `false` | Active le quota journalier par identité |
+| `SHERPA_DAILY_REQUEST_QUOTA` | `1000` | Requêtes autorisées par jour et par identité |
 
 > Routes **publiques** (jamais protégées) : `/`, `/healthz`, `/metrics`.
 > Identité de rate-limiting : clé API si présente, sinon IP cliente.

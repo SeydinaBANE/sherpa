@@ -9,6 +9,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 ### Added
 - LLM-judge pour les évaluations : `evals/judge.py` (`LLMJudge` + `JudgeVerdict`, JSON validé)
   et runner `evals/judge_run.py` (`make judge`), actif sur le backend `anthropic`, ignoré sinon.
+- Quota journalier par utilisateur : `DailyRequestQuota` + dépendance `enforce_quota`
+  (off par défaut, `SHERPA_QUOTA_ENABLED` / `SHERPA_DAILY_REQUEST_QUOTA`) → `429`.
 
 ## [0.4.0] - 2026-06-11
 ### Added
