@@ -6,6 +6,8 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
+### Added
+- Scan d'image Docker **Trivy** dans la CI (job `docker`, échec sur HIGH/CRITICAL corrigeables).
 
 ## [0.6.0] - 2026-06-11
 ### Added

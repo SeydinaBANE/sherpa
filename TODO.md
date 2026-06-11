@@ -55,5 +55,6 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Pipeline déploiement Cloud Run (canary `--no-traffic`) + smoke test + promotion
 - [x] Manifeste Cloud Run (`infra/cloudrun.yaml`)
 - [ ] Branchement réel GCP (Workload Identity, Secret Manager)
-- [ ] Scan d'image (Trivy) + pip-audit
+- [x] Scan d'image (Trivy) en CI
+- [ ] pip-audit en CI
 - [x] Conformité RGPD (effacement cours & étudiant) — rétention/runbook à compléter

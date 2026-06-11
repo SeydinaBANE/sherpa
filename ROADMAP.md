@@ -33,5 +33,6 @@
 ## Phase 5 — Déploiement 🔶
 - ✅ Pipeline de déploiement (`deploy.yml`) : Cloud Run, canary `--no-traffic`, smoke test, promotion.
 - ✅ Smoke test (`scripts/smoke_test.py`) + manifeste `infra/cloudrun.yaml`.
-- ⬜ Branchement réel GCP (Workload Identity, Secret Manager) + scan d'image (Trivy).
+- ✅ Scan d'image Trivy en CI (HIGH/CRITICAL).
+- ⬜ Branchement réel GCP (Workload Identity, Secret Manager).
 - ⬜ Canary monitoring & runbook on-call.

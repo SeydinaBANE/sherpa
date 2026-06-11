@@ -49,5 +49,15 @@ jobs:
     needs: quality
     steps:
       - uses: actions/checkout@v4
+
       - name: Build image
         run: docker build -f docker/Dockerfile -t sherpa:ci .
+
+      - name: Scan image (Trivy)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: sherpa:ci
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
