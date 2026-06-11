@@ -91,7 +91,7 @@ no_implicit_reexport = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["qdrant_client.*", "voyageai.*", "rank_bm25.*", "fitz.*", "langfuse.*"]
+module = ["qdrant_client.*", "voyageai.*", "anthropic.*", "rank_bm25.*", "fitz.*", "langfuse.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

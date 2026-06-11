@@ -14,11 +14,15 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Documentation complète
 
 ## Phase 1 — Ingestion + RAG production
-- [ ] Adapter `QdrantRetriever` (implémente `RetrieverPort`)
-- [ ] Adapter `VoyageEmbedding` (implémente `EmbeddingPort`)
-- [ ] Adapter `AnthropicLLM` (implémente `LLMPort`, routing multi-modèle)
-- [ ] Parsing PDF (PyMuPDF) + chunking sémantique
-- [ ] Retrieval hybride (dense + BM25) + RRF + reranking
+- [x] Adapter `QdrantRetriever` (implémente `RetrieverPort`)
+- [x] Adapter `VoyageEmbedding` (implémente `EmbeddingPort`)
+- [x] Adapter `AnthropicLLM` (implémente `LLMPort`, routing multi-modèle)
+- [x] Parsing PDF (PyMuPDF) / txt / md (`load_text`)
+- [x] Retrieval hybride (dense + sparse) + fusion RRF
+- [x] Switch de backend par config + wiring
+- [ ] Test d'intégration Qdrant (testcontainers)
+- [ ] Endpoint d'upload de fichier (multipart) branché sur `load_text`
+- [ ] Reranking cross-encoder
 - [ ] Persistance métadonnées chunks (Postgres + Alembic)
 
 ## Phase 2 — Agents
