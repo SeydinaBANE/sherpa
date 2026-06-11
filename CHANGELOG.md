@@ -6,8 +6,10 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
+
+## [0.2.0] - 2026-06-11
 ### Added
-- Phase 1 (en cours) : adapters de production derrière les ports existants.
+- Phase 1 : adapters de production derrière les ports existants.
   - `VoyageEmbedding` (EmbeddingPort) et `AnthropicLLM` / Claude (LLMPort), imports lazy, clients injectables.
   - `QdrantRetriever` (RetrieverPort) + helpers de mapping purs testés.
   - `reciprocal_rank_fusion` (RRF) et `HybridRetriever` (dense + sparse).
@@ -46,5 +48,6 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Docker multi-stage, docker-compose (qdrant / postgres / redis), CI GitHub Actions.
 - Documentation complète (PROJECT, ROADMAP, docs/*, ADR).
 
-[Unreleased]: https://github.com/your-org/sherpa/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/your-org/sherpa/releases/tag/v0.1.0
+[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/SeydinaBANE/sherpa/releases/tag/v0.1.0

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sherpa"
-version = "0.1.0"
+version = "0.2.0"
 description = "Sherpa — Tuteur IA pour la préparation d'examens (RAG + agents, production-grade)"
 readme = "README.md"
 requires-python = ">=3.11"
