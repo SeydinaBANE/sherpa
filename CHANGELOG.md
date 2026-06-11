@@ -7,6 +7,12 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-11
+### Added
+- Phase 5 (déploiement) : workflow `deploy.yml` (Cloud Run, opt-in via `DEPLOY_ENABLED`,
+  build+push image, déploiement canary `--no-traffic`, smoke test, promotion du trafic),
+  `scripts/smoke_test.py` (`make smoke`) et manifeste `infra/cloudrun.yaml`.
+
 ## [0.5.0] - 2026-06-11
 ### Added
 - LLM-judge pour les évaluations : `evals/judge.py` (`LLMJudge` + `JudgeVerdict`, JSON validé)
@@ -82,7 +88,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Docker multi-stage, docker-compose (qdrant / postgres / redis), CI GitHub Actions.
 - Documentation complète (PROJECT, ROADMAP, docs/*, ADR).
 
-[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.2.0...v0.3.0

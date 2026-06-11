@@ -20,20 +20,30 @@ healthcheck intégré. Construite en CI (job `docker`).
 - Secrets via **Secret Manager** (jamais en clair).
 - Variables d'env injectées par environnement.
 
-## Pipeline (cible Phase 5)
+## Pipeline (`.github/workflows/deploy.yml`)
+
+Déclencheurs : tag `v*` ou `workflow_dispatch`. **Opt-in** : le job ne s'exécute que si la
+variable de dépôt `DEPLOY_ENABLED == 'true'` (sinon ignoré → la CI ne casse jamais sans secrets).
 
 ```
-push main → CI (lint, types, tests, evals, scans, build)
-          → push image registre
-          → deploy Cloud Run (révision canary, ex. 10 % trafic)
-          → smoke tests sur l'URL
-          → promotion 100 % ou rollback
+tag v* → auth GCP (Workload Identity) → build & push image (Artifact Registry)
+       → deploy Cloud Run en --no-traffic (révision canary)
+       → smoke test sur l'URL de la révision
+       → promotion du trafic vers la dernière révision (--to-latest)
 ```
+
+### Configuration requise (à créer côté GitHub/GCP)
+
+- Variables de dépôt : `DEPLOY_ENABLED=true`, `GCP_PROJECT`, `GCP_REGION`.
+- Secrets : `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT` (Workload Identity Federation).
+- Secrets applicatifs (clés API, URLs DB/Redis/Qdrant) dans **Secret Manager**, injectés
+  dans Cloud Run (cf. `infra/cloudrun.yaml`).
 
 ## Smoke tests
 
-- `GET /healthz` == 200.
-- `/ingest` puis `/ask` sur un cours de référence → réponse ancrée.
+`scripts/smoke_test.py` (aussi `make smoke BASE_URL=...`) : `GET /healthz` == 200, puis
+`/ingest` et `/ask` sur un cours de référence → réponse **ancrée**. Exécuté automatiquement
+sur la révision canary avant promotion du trafic.
 
 ## Rollback
 
