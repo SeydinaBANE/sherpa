@@ -6,6 +6,9 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
+### Added
+- LLM-judge pour les évaluations : `evals/judge.py` (`LLMJudge` + `JudgeVerdict`, JSON validé)
+  et runner `evals/judge_run.py` (`make judge`), actif sur le backend `anthropic`, ignoré sinon.
 
 ## [0.4.0] - 2026-06-11
 ### Added

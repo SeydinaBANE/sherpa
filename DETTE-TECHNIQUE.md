@@ -17,7 +17,7 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 | 6 | Pas de reranking cross-encoder | 🟡 | 🟡 | à faire |
 | 7 | Routing d'intention par mots-clés | 🟢 | 🟢 | à faire |
 | 8 | Observabilité partielle (pas de Langfuse/Grafana) | 🟡 | 🟡 | à faire |
-| 9 | Evals légères (pas de RAGAS/LLM-judge) | 🟡 | 🟡 | à faire |
+| 9 | LLM-judge présent ; RAGAS restant | 🟡 | 🟡 | partiel |
 | 10 | Cache LLM + embeddings en place | 🟢 | — | fait |
 | 11 | Graphe LangGraph compilé une fois (mémoïsé) | 🟢 | — | fait |
 
@@ -64,8 +64,9 @@ Métriques Prometheus + logs corrélés en place ; **Langfuse** (traces LLM/coû
 **Grafana/alerting/SLO** non câblés. → Phase 3 (cf. [OBSERVABILITY](docs/OBSERVABILITY.md)).
 
 ### 9 · Évaluations
-`evals/` mesure `grounding` + `keyword_recall`. Pas encore de RAGAS (faithfulness, answer/
-context relevancy) ni de LLM-judge. → cf. [EVALS](docs/EVALS.md).
+`evals/` mesure `grounding` + `keyword_recall` (offline) et fournit un **LLM-judge**
+(`make judge`, actif sous `anthropic`). Reste : **RAGAS** (answer/context relevancy, recall)
+et l'intégration en CI sur clés réelles. → cf. [EVALS](docs/EVALS.md).
 
 ### 10 · Cache
 Cache des **complétions LLM** (`CachingLLM`) et des **embeddings** (`CachingEmbedding`) en
