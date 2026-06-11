@@ -46,6 +46,9 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [ ] Retries/backoff, circuit breaker (tenacity)
 - [ ] Quotas par utilisateur + budgets coûts
 
+## Démo
+- [x] UI de démo (page unique servie sur `/` : ingestion + chat tutor/quiz/plan)
+
 ## Phase 5 — Déploiement
 - [ ] Pipeline déploiement Cloud Run + canary + smoke tests
 - [ ] Scans sécurité (pip-audit, Trivy) + secrets manager

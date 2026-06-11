@@ -32,8 +32,12 @@ Détails : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 make install        # venv + dépendances dev
 cp .env.example .env
 make test           # lance la suite de tests
-make dev            # API sur http://localhost:8000 (docs: /docs)
+make dev            # API + UI de démo sur http://localhost:8000
 ```
+
+- **UI de démo** : http://localhost:8000/ (ingestion + chat tutor/quiz/plan)
+- **Docs OpenAPI** : http://localhost:8000/docs
+- **Métriques** : http://localhost:8000/metrics
 
 Exemple end-to-end :
 

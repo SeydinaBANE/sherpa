@@ -13,7 +13,7 @@ from app.domain.exceptions import (
 )
 from app.infrastructure.observability.logging import configure_logging
 from app.presentation.middleware import observability_middleware
-from app.presentation.routers import agents, assistant, health, memory, rag
+from app.presentation.routers import agents, assistant, health, memory, rag, web
 
 
 def _register_exception_handlers(app: FastAPI) -> None:
@@ -43,6 +43,7 @@ def create_app() -> FastAPI:
         description="Tuteur IA pour la préparation d'examens (RAG + agents).",
     )
     app.middleware("http")(observability_middleware)
+    app.include_router(web.router)
     app.include_router(health.router)
     app.include_router(rag.router)
     app.include_router(agents.router)

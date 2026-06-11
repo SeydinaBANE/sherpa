@@ -28,6 +28,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Observabilité (Phase 3) : métriques Prometheus sur `GET /metrics` (compteur + histogramme
   de latence, label `path` = template de route), middleware `X-Request-ID` corrélé aux logs
   structlog, log d'accès par requête.
+- UI de démo : page unique (HTML/CSS/JS vanilla, sans build) servie sur `GET /` — ingestion
+  texte/fichier + chat branché sur `/assistant` (rendu answer/quiz/plan + citations).
 
 ## [0.1.0] - 2026-06-11
 ### Added
