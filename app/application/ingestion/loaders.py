@@ -6,16 +6,20 @@ _TEXT_SUFFIXES = {".txt", ".md"}
 
 
 def load_text(path: Path) -> str:
-    suffix = path.suffix.lower()
+    return load_bytes(path.name, path.read_bytes())
+
+
+def load_bytes(filename: str, data: bytes) -> str:
+    suffix = Path(filename).suffix.lower()
     if suffix in _TEXT_SUFFIXES:
-        return path.read_text(encoding="utf-8")
+        return data.decode("utf-8")
     if suffix == ".pdf":
-        return _load_pdf(path)
+        return _load_pdf_bytes(data)
     raise ValueError(f"Type de fichier non supporté: {suffix}")
 
 
-def _load_pdf(path: Path) -> str:
+def _load_pdf_bytes(data: bytes) -> str:
     import fitz
 
-    with fitz.open(path) as document:
+    with fitz.open(stream=data, filetype="pdf") as document:
         return "\n\n".join(page.get_text() for page in document)

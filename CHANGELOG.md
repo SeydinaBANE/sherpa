@@ -14,6 +14,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   - Chargement de documents `.pdf` / `.txt` / `.md` (`load_text`, PyMuPDF lazy).
 - Sélection de backend par configuration (`SHERPA_RETRIEVAL_BACKEND`, `SHERPA_LLM_BACKEND`)
   avec wiring dans la composition root ; défaut `memory`/`echo` (hors-ligne).
+- Endpoint `POST /ingest/file` (multipart) : upload `.pdf`/`.txt`/`.md` → ingestion
+  (`load_bytes`, PDF en flux), `415` si type non supporté.
 
 ## [0.1.0] - 2026-06-11
 ### Added

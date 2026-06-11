@@ -20,8 +20,8 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Parsing PDF (PyMuPDF) / txt / md (`load_text`)
 - [x] Retrieval hybride (dense + sparse) + fusion RRF
 - [x] Switch de backend par config + wiring
+- [x] Endpoint d'upload de fichier (multipart) branché sur `load_bytes`
 - [ ] Test d'intégration Qdrant (testcontainers)
-- [ ] Endpoint d'upload de fichier (multipart) branché sur `load_text`
 - [ ] Reranking cross-encoder
 - [ ] Persistance métadonnées chunks (Postgres + Alembic)
 

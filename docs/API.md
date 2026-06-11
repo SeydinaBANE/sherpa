@@ -20,6 +20,18 @@ Indexe un document dans le corpus d'un cours.
 Réponse `201` : `{ "course_id": "bio", "chunks_created": 3 }`.
 Ré-ingérer un contenu identique renvoie `chunks_created: 0` (idempotence).
 
+### `POST /ingest/file`
+Indexe un fichier uploadé (`multipart/form-data`).
+
+- Champ `course_id` (form) + champ `file` (`.pdf`, `.txt`, `.md`).
+- Réponse `201` : `{ "course_id": "bio", "chunks_created": 5 }`.
+- `415` si le type de fichier n'est pas supporté.
+
+```bash
+curl -X POST localhost:8000/ingest/file \
+  -F course_id=bio -F file=@cours.pdf
+```
+
 ### `POST /ask`
 Pose une question, réponse ancrée avec citations.
 
@@ -41,6 +53,7 @@ Réponse `200` :
 
 | Code | Signification |
 |---|---|
+| 415 | Type de fichier non supporté (`/ingest/file`) |
 | 422 | Aucun contexte pertinent (`NoRelevantContextError`) |
 | 404 | Cours introuvable (`CourseNotFoundError`) |
 | 429 | Budget de tokens dépassé (`BudgetExceededError`) |
