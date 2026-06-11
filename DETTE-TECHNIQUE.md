@@ -19,7 +19,7 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 | 8 | Observabilité partielle (pas de Langfuse/Grafana) | 🟡 | 🟡 | à faire |
 | 9 | Evals légères (pas de RAGAS/LLM-judge) | 🟡 | 🟡 | à faire |
 | 10 | Cache LLM + embeddings en place | 🟢 | — | fait |
-| 11 | Graphe LangGraph recompilé par requête | 🟢 | 🟢 | à faire |
+| 11 | Graphe LangGraph compilé une fois (mémoïsé) | 🟢 | — | fait |
 
 ## Détail
 
@@ -72,9 +72,9 @@ Cache des **complétions LLM** (`CachingLLM`) et des **embeddings** (`CachingEmb
 place (in-memory/Redis). Reste à **mesurer le gain** sous charge réelle
 (cf. [COST](docs/COST.md), [PERFORMANCE](docs/PERFORMANCE.md)).
 
-### 11 · Compilation du graphe
-`get_assistant_orchestrator` reconstruit et `compile()` le graphe LangGraph à chaque
-requête. Coût négligeable mais évitable. → Mémoïser le graphe compilé.
+### 11 · Compilation du graphe ✅
+`get_assistant_orchestrator` est mémoïsé (`lru_cache`) : le graphe LangGraph est compilé
+une seule fois par processus (réinitialisé entre tests via le `conftest`).
 
 ## Principe
 

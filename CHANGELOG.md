@@ -12,6 +12,9 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   Enregistrement à l'ingestion.
 - Suppression de cours (RGPD, droit à l'effacement) : `delete_course` sur `RetrieverPort`
   (in-memory, Qdrant, hybride) + endpoints `GET /courses/{id}/chunks` et `DELETE /courses/{id}`.
+### Changed
+- Orchestrateur LangGraph mémoïsé (`lru_cache`) : le graphe est compilé une seule fois
+  par processus au lieu d'être reconstruit à chaque requête.
 
 ## [0.3.0] - 2026-06-11
 ### Added

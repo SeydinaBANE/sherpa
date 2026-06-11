@@ -178,6 +178,7 @@ def get_chunk_store() -> ChunkMetadataPort:
     return InMemoryChunkMetadata()
 
 
+@lru_cache(maxsize=1)
 def get_assistant_orchestrator() -> AssistantOrchestrator:
     return AssistantOrchestrator(
         rag=get_rag_service(),
