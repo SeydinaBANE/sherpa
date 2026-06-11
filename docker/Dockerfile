@@ -6,8 +6,9 @@ ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 COPY pyproject.toml README.md ./
 COPY app ./app
 RUN python -m venv /opt/venv \
-    && /opt/venv/bin/pip install --upgrade pip \
-    && /opt/venv/bin/pip install ".[rag,data,observability,agents]"
+    && /opt/venv/bin/pip install --upgrade pip setuptools wheel \
+    && /opt/venv/bin/pip install ".[rag,data,observability,agents]" \
+    && /opt/venv/bin/pip install --upgrade wheel "jaraco.context>=6.1.0"
 
 FROM python:3.11-slim AS runtime
 ENV PATH="/opt/venv/bin:$PATH" \

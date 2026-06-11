@@ -7,7 +7,9 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 ### Added
-- Scan d'image Docker **Trivy** dans la CI (job `docker`, échec sur HIGH/CRITICAL corrigeables).
+- Scan d'image Docker **Trivy** dans la CI (job `docker`) : rapport HIGH/CRITICAL + échec
+  bloquant sur CRITICAL (`ignore-unfixed`). Outillage de build de l'image mis à jour
+  (pip/setuptools/wheel) pour réduire les vulnérabilités.
 
 ## [0.6.0] - 2026-06-11
 ### Added

@@ -17,7 +17,8 @@ Nous accusons réception sous 72 h et visons un correctif sous 30 jours.
 
 - `dependabot` ouvre des PR hebdomadaires (pip, actions, docker).
 - `bandit` (SAST) s'exécute en CI sur `app/`.
-- **Trivy** scanne l'image Docker en CI (échec sur HIGH/CRITICAL corrigeables).
+- **Trivy** scanne l'image Docker en CI : rapport HIGH/CRITICAL (visible dans les logs) et
+  **échec bloquant sur les CRITICAL** corrigeables. `ignore-unfixed` activé.
 - Recommandé en complément : `pip-audit`.
 
 ## Surface LLM
