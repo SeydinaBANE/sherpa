@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
 from app.application.agents.diagnoser import WeaknessDiagnoser
 from app.application.agents.planner import StudyPlanner
 from app.application.agents.quiz import QuizGenerator
@@ -14,7 +16,14 @@ from app.config import (
     Settings,
     get_settings,
 )
-from app.domain.ports import CachePort, EmbeddingPort, LLMPort, RetrieverPort, StudyMemoryPort
+from app.domain.ports import (
+    CachePort,
+    ChunkMetadataPort,
+    EmbeddingPort,
+    LLMPort,
+    RetrieverPort,
+    StudyMemoryPort,
+)
 from app.infrastructure.cache.in_memory import InMemoryCache
 from app.infrastructure.cache.redis import RedisCache
 from app.infrastructure.embeddings.caching import CachingEmbedding
@@ -24,6 +33,8 @@ from app.infrastructure.llm.caching import CachingLLM
 from app.infrastructure.llm.echo import EchoLLM
 from app.infrastructure.llm.resilient import ResilientLLM
 from app.infrastructure.orchestration.assistant import AssistantOrchestrator
+from app.infrastructure.persistence.chunkmeta_inmemory import InMemoryChunkMetadata
+from app.infrastructure.persistence.chunkmeta_sql import SqlChunkMetadata
 from app.infrastructure.persistence.engine import create_engine, create_session_factory
 from app.infrastructure.persistence.memory_inmemory import InMemoryStudyMemory
 from app.infrastructure.persistence.memory_sql import SqlStudyMemory
@@ -146,12 +157,25 @@ def get_weakness_diagnoser() -> WeaknessDiagnoser:
 
 
 @lru_cache(maxsize=1)
+def _get_session_factory() -> async_sessionmaker[AsyncSession]:
+    settings = get_settings()
+    return create_session_factory(create_engine(settings.database_url))
+
+
+@lru_cache(maxsize=1)
 def get_study_memory() -> StudyMemoryPort:
     settings = get_settings()
     if settings.memory_backend is MemoryBackend.SQL:
-        engine = create_engine(settings.database_url)
-        return SqlStudyMemory(create_session_factory(engine))
+        return SqlStudyMemory(_get_session_factory())
     return InMemoryStudyMemory()
+
+
+@lru_cache(maxsize=1)
+def get_chunk_store() -> ChunkMetadataPort:
+    settings = get_settings()
+    if settings.memory_backend is MemoryBackend.SQL:
+        return SqlChunkMetadata(_get_session_factory())
+    return InMemoryChunkMetadata()
 
 
 def get_assistant_orchestrator() -> AssistantOrchestrator:

@@ -88,6 +88,16 @@ Orchestration LangGraph : route un message libre vers l'agent adapté.
 `{ "student_id": "s1", "course_id": "bio" }` → diagnostic basé sur l'historique stocké
 (`404` si aucun historique).
 
+## Cours (gestion & RGPD)
+
+### `GET /courses/{course_id}/chunks`
+Liste les métadonnées des chunks indexés d'un cours →
+`{ "course_id", "chunks": [{ "chunk_id", "source", "ordinal", "created_at" }] }`.
+
+### `DELETE /courses/{course_id}`
+**Droit à l'effacement** : supprime les vecteurs (retriever) et les métadonnées du cours →
+`{ "course_id", "vectors_deleted", "chunks_deleted" }`.
+
 ## Mémoire étudiant
 
 ### `POST /memory/answers`

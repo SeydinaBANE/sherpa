@@ -6,6 +6,12 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
+### Added
+- Persistance des métadonnées de chunks : `ChunkMetadataPort` + adapters `InMemoryChunkMetadata`
+  (défaut) et `SqlChunkMetadata` (SQLAlchemy async), migration Alembic `chunk_meta` (0002).
+  Enregistrement à l'ingestion.
+- Suppression de cours (RGPD, droit à l'effacement) : `delete_course` sur `RetrieverPort`
+  (in-memory, Qdrant, hybride) + endpoints `GET /courses/{id}/chunks` et `DELETE /courses/{id}`.
 
 ## [0.3.0] - 2026-06-11
 ### Added
