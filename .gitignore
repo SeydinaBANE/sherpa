@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Tooling caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.secrets.baseline
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Data & artifacts
+data/
+*.sqlite3
+*.db
+storage/
+qdrant_storage/
+pgdata/
+
+# Notebooks
+.ipynb_checkpoints/

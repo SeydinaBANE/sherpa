@@ -1,0 +1,53 @@
+name: sherpa
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file: .env
+    environment:
+      SHERPA_QDRANT_URL: http://qdrant:6333
+      SHERPA_DATABASE_URL: postgresql+psycopg://sherpa:sherpa@postgres:5432/sherpa
+      SHERPA_REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      qdrant:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  qdrant:
+    image: qdrant/qdrant:v1.12.4
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sherpa
+      POSTGRES_PASSWORD: sherpa
+      POSTGRES_DB: sherpa
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sherpa"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  qdrant_storage:
+  pgdata:

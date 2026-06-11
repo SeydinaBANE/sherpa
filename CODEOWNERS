@@ -1,0 +1,12 @@
+# Propriété du code — révision requise par dossier
+# Remplacer @your-org/... par les équipes/GitHub handles réels.
+
+*                       @your-org/maintainers
+
+/app/domain/            @your-org/ai-core
+/app/application/        @your-org/ai-core
+/app/infrastructure/    @your-org/platform
+/app/presentation/      @your-org/platform
+/evals/                 @your-org/ai-core
+/docs/                  @your-org/maintainers
+/.github/               @your-org/platform
