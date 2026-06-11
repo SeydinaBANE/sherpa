@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Typed: mypy strict](https://img.shields.io/badge/mypy-strict-2A6DB2)](https://mypy-lang.org/)
-[![Tests](https://img.shields.io/badge/tests-82%20passing-4ade80)](tests/)
+[![Tests](https://img.shields.io/badge/tests-89%20passing-4ade80)](tests/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 > Transforme les supports de cours d'un étudiant en un assistant de révision **fiable, ancré (citations) et adaptatif**.
