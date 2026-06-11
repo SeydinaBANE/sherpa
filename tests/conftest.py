@@ -3,22 +3,26 @@ from __future__ import annotations
 from collections.abc import AsyncIterator, Iterator
 
 import pytest
+from app.config import get_settings
 from app.presentation import dependencies
 from app.presentation.api import create_app
 from httpx import ASGITransport, AsyncClient
 
 
+def _clear_caches() -> None:
+    get_settings.cache_clear()
+    dependencies.get_retriever.cache_clear()
+    dependencies.get_llm.cache_clear()
+    dependencies.get_study_memory.cache_clear()
+    dependencies.get_cache.cache_clear()
+    dependencies.get_rate_limiter.cache_clear()
+
+
 @pytest.fixture(autouse=True)
 def _reset_singletons() -> Iterator[None]:
-    dependencies.get_retriever.cache_clear()
-    dependencies.get_llm.cache_clear()
-    dependencies.get_study_memory.cache_clear()
-    dependencies.get_cache.cache_clear()
+    _clear_caches()
     yield
-    dependencies.get_retriever.cache_clear()
-    dependencies.get_llm.cache_clear()
-    dependencies.get_study_memory.cache_clear()
-    dependencies.get_cache.cache_clear()
+    _clear_caches()
 
 
 @pytest.fixture

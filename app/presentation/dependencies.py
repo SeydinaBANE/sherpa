@@ -27,6 +27,7 @@ from app.infrastructure.orchestration.assistant import AssistantOrchestrator
 from app.infrastructure.persistence.engine import create_engine, create_session_factory
 from app.infrastructure.persistence.memory_inmemory import InMemoryStudyMemory
 from app.infrastructure.persistence.memory_sql import SqlStudyMemory
+from app.infrastructure.ratelimit.in_memory import FixedWindowRateLimiter
 from app.infrastructure.resilience.budget import DailyTokenBudget
 from app.infrastructure.resilience.circuit_breaker import CircuitBreaker
 from app.infrastructure.retrieval.hybrid import HybridRetriever
@@ -59,6 +60,15 @@ def get_retriever() -> RetrieverPort:
         )
         return HybridRetriever(dense=dense, sparse=InMemoryRetriever(), rrf_k=settings.rrf_k)
     return InMemoryRetriever()
+
+
+@lru_cache(maxsize=1)
+def get_rate_limiter() -> FixedWindowRateLimiter:
+    settings = get_settings()
+    return FixedWindowRateLimiter(
+        limit=settings.rate_limit_requests,
+        window_seconds=settings.rate_limit_window_seconds,
+    )
 
 
 @lru_cache(maxsize=1)

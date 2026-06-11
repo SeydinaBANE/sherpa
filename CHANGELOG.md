@@ -14,6 +14,10 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Cache des embeddings : `CachingEmbedding` (cache par texte, ne calcule que les manquants
   en un seul batch). Activé sur le backend `hybrid` ; réglable via
   `SHERPA_EMBEDDING_CACHE_ENABLED`, `SHERPA_EMBEDDING_CACHE_TTL_SECONDS`.
+- Sécurité API : authentification par clé (`X-API-Key`) et rate-limiting fenêtre fixe
+  (`FixedWindowRateLimiter`), désactivés par défaut, sur les routes applicatives
+  (`/`, `/healthz`, `/metrics` restent publiques). Config `SHERPA_AUTH_ENABLED`,
+  `SHERPA_API_KEYS`, `SHERPA_RATE_LIMIT_*`. → `401` / `429`.
 
 ## [0.2.0] - 2026-06-11
 ### Added

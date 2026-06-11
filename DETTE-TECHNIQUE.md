@@ -11,7 +11,7 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 |---|---|---|---|---|
 | 1 | Pas de tests d'intégration Qdrant (réseau) | 🟡 | 🟡 | à faire |
 | 2 | État applicatif **mono-process** (défauts in-memory) | 🔴 | 🟡 | par design (dev) |
-| 3 | Absence d'auth / autorisation sur les endpoints | 🔴 | 🟡 | à faire |
+| 3 | AuthN (clé API) + rate-limit en place ; pas d'autorisation fine | 🟡 | 🟡 | partiel |
 | 4 | Budget tokens approximatif & non distribué | 🟡 | 🟡 | à faire |
 | 5 | Métadonnées de chunks non persistées | 🟡 | 🟡 | à faire |
 | 6 | Pas de reranking cross-encoder | 🟡 | 🟡 | à faire |
@@ -35,9 +35,11 @@ sparse du `HybridRetriever` vivent en mémoire de processus : non partagés entr
 (stateless) via `SHERPA_*_BACKEND`.
 
 ### 3 · Authentification / autorisation
-Les endpoints sont ouverts ; `student_id`/`course_id` sont des entrées de confiance.
-Pas d'isolation par utilisateur au-delà du filtrage `course_id` au retrieval.
-→ Auth JWT + RBAC + scoping des ressources (cf. [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)).
+**Authentification par clé API** (`X-API-Key`) et **rate-limiting** en place (off par défaut,
+activables par config). Limites restantes : pas d'**autorisation fine** (un porteur de clé
+accède à tous les cours/étudiants ; `student_id`/`course_id` restent de confiance) ; le
+rate-limiter est **par processus** (non distribué). → RBAC + scoping des ressources + JWT,
+rate-limit partagé (Redis). Cf. [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
 
 ### 4 · Budget de tokens
 `DailyTokenBudget` charge le **plafond `max_tokens`** (réservation), pas la consommation

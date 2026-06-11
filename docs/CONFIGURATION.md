@@ -12,6 +12,19 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 | `SHERPA_API_HOST` | `127.0.0.1` | Hôte d'écoute (le conteneur écoute `0.0.0.0`) |
 | `SHERPA_API_PORT` | `8000` | Port d'écoute |
 
+## Sécurité
+
+| Variable | Défaut | Description |
+|---|---|---|
+| `SHERPA_AUTH_ENABLED` | `false` | Exige une clé API (`X-API-Key`) sur les routes applicatives |
+| `SHERPA_API_KEYS` | – | Clés autorisées, séparées par des virgules |
+| `SHERPA_RATE_LIMIT_ENABLED` | `false` | Active le rate-limiting (fenêtre fixe) |
+| `SHERPA_RATE_LIMIT_REQUESTS` | `60` | Requêtes autorisées par fenêtre |
+| `SHERPA_RATE_LIMIT_WINDOW_SECONDS` | `60` | Durée de la fenêtre |
+
+> Routes **publiques** (jamais protégées) : `/`, `/healthz`, `/metrics`.
+> Identité de rate-limiting : clé API si présente, sinon IP cliente.
+
 ## Backends (commutateurs)
 
 | Variable | Défaut | Valeurs |
