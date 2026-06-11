@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Si vous utilisez ce logiciel, merci de le citer comme ci-dessous."
+title: "Sherpa — Tuteur IA pour la préparation d'examens"
+abstract: >-
+  Produit GenAI production-grade : RAG ancré (citations), agents et orchestration
+  LangGraph, mémoire étudiant persistée, observabilité et résilience.
+type: software
+authors:
+  - given-names: Seydina
+    family-names: Bane
+repository-code: "https://github.com/SeydinaBANE/sherpa"
+url: "https://github.com/SeydinaBANE/sherpa"
+license: MIT
+version: 0.2.0
+date-released: "2026-06-11"
+keywords:
+  - rag
+  - llm
+  - agents
+  - langgraph
+  - genai
+  - education
+  - fastapi
+  - qdrant
+  - anthropic

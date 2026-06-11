@@ -17,6 +17,7 @@ Index de la documentation technique. Voir aussi le [README](../README.md) racine
 - [DEPLOYMENT.md](DEPLOYMENT.md) — environnements, Cloud Run, rollback
 - [RELEASE.md](RELEASE.md) — processus de release & versionnage
 - [COST.md](COST.md) — modèle de coûts & garde-fous
+- [PERFORMANCE.md](PERFORMANCE.md) — indicateurs, cibles & protocole de benchmark
 
 ## Qualité & conformité
 - [TESTING.md](TESTING.md) — stratégie & pyramide de tests
