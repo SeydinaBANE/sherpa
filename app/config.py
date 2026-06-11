@@ -26,6 +26,11 @@ class MemoryBackend(StrEnum):
     SQL = "sql"
 
 
+class CacheBackend(StrEnum):
+    MEMORY = "memory"
+    REDIS = "redis"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="SHERPA_",
@@ -50,6 +55,7 @@ class Settings(BaseSettings):
     retrieval_backend: RetrievalBackend = RetrievalBackend.MEMORY
     llm_backend: LLMBackend = LLMBackend.ECHO
     memory_backend: MemoryBackend = MemoryBackend.MEMORY
+    cache_backend: CacheBackend = CacheBackend.MEMORY
 
     qdrant_url: str = "http://localhost:6333"
     qdrant_collection: str = "sherpa_chunks"
@@ -66,15 +72,30 @@ class Settings(BaseSettings):
     max_tokens_per_request: int = Field(default=4096, gt=0)
     daily_token_budget: int = Field(default=1_000_000, gt=0)
 
+    llm_cache_enabled: bool = True
+    llm_cache_ttl_seconds: int = Field(default=3600, gt=0)
+    embedding_cache_enabled: bool = True
+    embedding_cache_ttl_seconds: int = Field(default=86_400, gt=0)
+
     llm_max_retries: int = Field(default=3, ge=1)
     llm_retry_base_delay: float = Field(default=0.2, ge=0)
     llm_timeout_seconds: float = Field(default=30.0, gt=0)
     breaker_failure_threshold: int = Field(default=5, ge=1)
     breaker_reset_timeout: float = Field(default=30.0, gt=0)
 
+    auth_enabled: bool = False
+    api_keys: str = ""
+    rate_limit_enabled: bool = False
+    rate_limit_requests: int = Field(default=60, gt=0)
+    rate_limit_window_seconds: int = Field(default=60, gt=0)
+
     @property
     def is_production(self) -> bool:
         return self.env is Environment.PRODUCTION
+
+    @property
+    def api_key_set(self) -> frozenset[str]:
+        return frozenset(key.strip() for key in self.api_keys.split(",") if key.strip())
 
 
 @lru_cache(maxsize=1)

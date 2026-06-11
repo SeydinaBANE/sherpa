@@ -35,5 +35,6 @@ gh release create v0.3.0 --target main --title "v0.3.0" --notes "…"
 
 ## Historique
 
+- **v0.3.0** — Cache LLM & embeddings, authentification par clé API & rate-limiting.
 - **v0.2.0** — RAG production, agents, orchestration LangGraph, mémoire, observabilité, résilience.
 - **v0.1.0** — Fondations (Phase 0).

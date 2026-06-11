@@ -7,6 +7,20 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-11
+### Added
+- Cache LLM : `CachePort` + adapters `InMemoryCache` (défaut, TTL) et `RedisCache` (async).
+  Décorateur `CachingLLM` qui court-circuite les complétions identiques (clé = hash
+  système+prompt+modèle+max_tokens). Activé sur le backend `anthropic` ; réglable via
+  `SHERPA_LLM_CACHE_ENABLED`, `SHERPA_LLM_CACHE_TTL_SECONDS`, `SHERPA_CACHE_BACKEND`.
+- Cache des embeddings : `CachingEmbedding` (cache par texte, ne calcule que les manquants
+  en un seul batch). Activé sur le backend `hybrid` ; réglable via
+  `SHERPA_EMBEDDING_CACHE_ENABLED`, `SHERPA_EMBEDDING_CACHE_TTL_SECONDS`.
+- Sécurité API : authentification par clé (`X-API-Key`) et rate-limiting fenêtre fixe
+  (`FixedWindowRateLimiter`), désactivés par défaut, sur les routes applicatives
+  (`/`, `/healthz`, `/metrics` restent publiques). Config `SHERPA_AUTH_ENABLED`,
+  `SHERPA_API_KEYS`, `SHERPA_RATE_LIMIT_*`. → `401` / `429`.
+
 ## [0.2.0] - 2026-06-11
 ### Added
 - Phase 1 : adapters de production derrière les ports existants.
@@ -48,6 +62,7 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Docker multi-stage, docker-compose (qdrant / postgres / redis), CI GitHub Actions.
 - Documentation complète (PROJECT, ROADMAP, docs/*, ADR).
 
-[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/SeydinaBANE/sherpa/releases/tag/v0.1.0

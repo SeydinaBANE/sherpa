@@ -11,14 +11,14 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 |---|---|---|---|---|
 | 1 | Pas de tests d'intégration Qdrant (réseau) | 🟡 | 🟡 | à faire |
 | 2 | État applicatif **mono-process** (défauts in-memory) | 🔴 | 🟡 | par design (dev) |
-| 3 | Absence d'auth / autorisation sur les endpoints | 🔴 | 🟡 | à faire |
+| 3 | AuthN (clé API) + rate-limit en place ; pas d'autorisation fine | 🟡 | 🟡 | partiel |
 | 4 | Budget tokens approximatif & non distribué | 🟡 | 🟡 | à faire |
 | 5 | Métadonnées de chunks non persistées | 🟡 | 🟡 | à faire |
 | 6 | Pas de reranking cross-encoder | 🟡 | 🟡 | à faire |
 | 7 | Routing d'intention par mots-clés | 🟢 | 🟢 | à faire |
 | 8 | Observabilité partielle (pas de Langfuse/Grafana) | 🟡 | 🟡 | à faire |
 | 9 | Evals légères (pas de RAGAS/LLM-judge) | 🟡 | 🟡 | à faire |
-| 10 | Cache Redis configuré mais non utilisé | 🟢 | 🟡 | à faire |
+| 10 | Cache LLM + embeddings en place | 🟢 | — | fait |
 | 11 | Graphe LangGraph recompilé par requête | 🟢 | 🟢 | à faire |
 
 ## Détail
@@ -35,9 +35,11 @@ sparse du `HybridRetriever` vivent en mémoire de processus : non partagés entr
 (stateless) via `SHERPA_*_BACKEND`.
 
 ### 3 · Authentification / autorisation
-Les endpoints sont ouverts ; `student_id`/`course_id` sont des entrées de confiance.
-Pas d'isolation par utilisateur au-delà du filtrage `course_id` au retrieval.
-→ Auth JWT + RBAC + scoping des ressources (cf. [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)).
+**Authentification par clé API** (`X-API-Key`) et **rate-limiting** en place (off par défaut,
+activables par config). Limites restantes : pas d'**autorisation fine** (un porteur de clé
+accède à tous les cours/étudiants ; `student_id`/`course_id` restent de confiance) ; le
+rate-limiter est **par processus** (non distribué). → RBAC + scoping des ressources + JWT,
+rate-limit partagé (Redis). Cf. [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
 
 ### 4 · Budget de tokens
 `DailyTokenBudget` charge le **plafond `max_tokens`** (réservation), pas la consommation
@@ -66,8 +68,9 @@ Métriques Prometheus + logs corrélés en place ; **Langfuse** (traces LLM/coû
 context relevancy) ni de LLM-judge. → cf. [EVALS](docs/EVALS.md).
 
 ### 10 · Cache
-Redis est prévu (compose + config) mais non utilisé pour cacher réponses/embeddings.
-→ Cache derrière un port, mesurer le gain (cf. [COST](docs/COST.md)).
+Cache des **complétions LLM** (`CachingLLM`) et des **embeddings** (`CachingEmbedding`) en
+place (in-memory/Redis). Reste à **mesurer le gain** sous charge réelle
+(cf. [COST](docs/COST.md), [PERFORMANCE](docs/PERFORMANCE.md)).
 
 ### 11 · Compilation du graphe
 `get_assistant_orchestrator` reconstruit et `compile()` le graphe LangGraph à chaque

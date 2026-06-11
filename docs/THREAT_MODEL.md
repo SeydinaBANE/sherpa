@@ -19,7 +19,9 @@
 
 ### Abus / coûts
 - **Risque** : usage massif pour épuiser le budget LLM.
-- **Mitigations** : rate limiting, quotas, budgets de tokens (429).
+- **Mitigations** : **rate-limiting** (`FixedWindowRateLimiter`, 429) + budget de tokens (429).
+  Authentification par **clé API** (`X-API-Key`) sur les routes applicatives.
+  *Restant* : rate-limit distribué (Redis) et autorisation fine (RBAC).
 
 ### Secrets
 - **Risque** : fuite de clés dans le dépôt ou les logs.

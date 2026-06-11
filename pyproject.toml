@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sherpa"
-version = "0.2.0"
+version = "0.3.0"
 description = "Sherpa — Tuteur IA pour la préparation d'examens (RAG + agents, production-grade)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -108,6 +108,7 @@ module = [
     "fitz.*",
     "langfuse.*",
     "prometheus_client.*",
+    "redis.*",
 ]
 ignore_missing_imports = true
 

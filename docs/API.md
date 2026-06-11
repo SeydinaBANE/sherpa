@@ -6,6 +6,12 @@ La spécification OpenAPI est générée automatiquement par FastAPI :
 - ReDoc : `http://localhost:8000/redoc`
 - Schéma JSON : `http://localhost:8000/openapi.json`
 
+## Authentification
+
+Si `SHERPA_AUTH_ENABLED=true`, les routes applicatives exigent un en-tête `X-API-Key`
+(valeur dans `SHERPA_API_KEYS`) → `401` sinon. Les routes `/`, `/healthz`, `/metrics`
+restent publiques. Avec `SHERPA_RATE_LIMIT_ENABLED=true`, dépassement → `429`.
+
 ## Endpoints
 
 ### `GET /healthz`

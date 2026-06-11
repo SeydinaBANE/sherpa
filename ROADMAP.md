@@ -27,7 +27,7 @@
 
 ## Phase 4 — Optimisation & résilience 🔶
 - ✅ Retries/backoff, circuit breaker, timeout (`ResilientLLM`) + budget tokens (`DailyTokenBudget`).
-- ⬜ Cache Redis (réponses/embeddings), batching embeddings.
+- ✅ Cache LLM (`CachingLLM`) + cache des embeddings (`CachingEmbedding`), in-memory/Redis.
 - ⬜ Quotas par utilisateur.
 
 ## Phase 5 — Déploiement ⬜

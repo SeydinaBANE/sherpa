@@ -12,13 +12,27 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 | `SHERPA_API_HOST` | `127.0.0.1` | Hôte d'écoute (le conteneur écoute `0.0.0.0`) |
 | `SHERPA_API_PORT` | `8000` | Port d'écoute |
 
+## Sécurité
+
+| Variable | Défaut | Description |
+|---|---|---|
+| `SHERPA_AUTH_ENABLED` | `false` | Exige une clé API (`X-API-Key`) sur les routes applicatives |
+| `SHERPA_API_KEYS` | – | Clés autorisées, séparées par des virgules |
+| `SHERPA_RATE_LIMIT_ENABLED` | `false` | Active le rate-limiting (fenêtre fixe) |
+| `SHERPA_RATE_LIMIT_REQUESTS` | `60` | Requêtes autorisées par fenêtre |
+| `SHERPA_RATE_LIMIT_WINDOW_SECONDS` | `60` | Durée de la fenêtre |
+
+> Routes **publiques** (jamais protégées) : `/`, `/healthz`, `/metrics`.
+> Identité de rate-limiting : clé API si présente, sinon IP cliente.
+
 ## Backends (commutateurs)
 
 | Variable | Défaut | Valeurs |
 |---|---|---|
 | `SHERPA_RETRIEVAL_BACKEND` | `memory` | `memory` (in-process) · `hybrid` (Qdrant + BM25) |
-| `SHERPA_LLM_BACKEND` | `echo` | `echo` (hors-ligne) · `anthropic` (Claude + résilience) |
+| `SHERPA_LLM_BACKEND` | `echo` | `echo` (hors-ligne) · `anthropic` (Claude + résilience + cache) |
 | `SHERPA_MEMORY_BACKEND` | `memory` | `memory` · `sql` (SQLAlchemy/Postgres) |
+| `SHERPA_CACHE_BACKEND` | `memory` | `memory` · `redis` |
 
 ## LLM (Claude) & embeddings
 
@@ -46,6 +60,10 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 
 | Variable | Défaut | Description |
 |---|---|---|
+| `SHERPA_LLM_CACHE_ENABLED` | `true` | Active le cache des complétions (backend `anthropic`) |
+| `SHERPA_LLM_CACHE_TTL_SECONDS` | `3600` | TTL d'une complétion en cache |
+| `SHERPA_EMBEDDING_CACHE_ENABLED` | `true` | Active le cache des embeddings (backend `hybrid`) |
+| `SHERPA_EMBEDDING_CACHE_TTL_SECONDS` | `86400` | TTL d'un embedding en cache |
 | `SHERPA_MAX_TOKENS_PER_REQUEST` | `4096` | Plafond de tokens par appel |
 | `SHERPA_DAILY_TOKEN_BUDGET` | `1000000` | Budget quotidien → `429` si dépassé |
 | `SHERPA_LLM_MAX_RETRIES` | `3` | Tentatives sur erreur transitoire |
