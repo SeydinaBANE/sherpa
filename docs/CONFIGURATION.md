@@ -17,8 +17,9 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 | Variable | Défaut | Valeurs |
 |---|---|---|
 | `SHERPA_RETRIEVAL_BACKEND` | `memory` | `memory` (in-process) · `hybrid` (Qdrant + BM25) |
-| `SHERPA_LLM_BACKEND` | `echo` | `echo` (hors-ligne) · `anthropic` (Claude + résilience) |
+| `SHERPA_LLM_BACKEND` | `echo` | `echo` (hors-ligne) · `anthropic` (Claude + résilience + cache) |
 | `SHERPA_MEMORY_BACKEND` | `memory` | `memory` · `sql` (SQLAlchemy/Postgres) |
+| `SHERPA_CACHE_BACKEND` | `memory` | `memory` · `redis` |
 
 ## LLM (Claude) & embeddings
 
@@ -46,6 +47,8 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 
 | Variable | Défaut | Description |
 |---|---|---|
+| `SHERPA_LLM_CACHE_ENABLED` | `true` | Active le cache des complétions (backend `anthropic`) |
+| `SHERPA_LLM_CACHE_TTL_SECONDS` | `3600` | Durée de vie d'une entrée de cache |
 | `SHERPA_MAX_TOKENS_PER_REQUEST` | `4096` | Plafond de tokens par appel |
 | `SHERPA_DAILY_TOKEN_BUDGET` | `1000000` | Budget quotidien → `429` si dépassé |
 | `SHERPA_LLM_MAX_RETRIES` | `3` | Tentatives sur erreur transitoire |

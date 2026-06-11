@@ -6,6 +6,11 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/)
 et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
+### Added
+- Cache LLM : `CachePort` + adapters `InMemoryCache` (défaut, TTL) et `RedisCache` (async).
+  Décorateur `CachingLLM` qui court-circuite les complétions identiques (clé = hash
+  système+prompt+modèle+max_tokens). Activé sur le backend `anthropic` ; réglable via
+  `SHERPA_LLM_CACHE_ENABLED`, `SHERPA_LLM_CACHE_TTL_SECONDS`, `SHERPA_CACHE_BACKEND`.
 
 ## [0.2.0] - 2026-06-11
 ### Added

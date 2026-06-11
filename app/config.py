@@ -26,6 +26,11 @@ class MemoryBackend(StrEnum):
     SQL = "sql"
 
 
+class CacheBackend(StrEnum):
+    MEMORY = "memory"
+    REDIS = "redis"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="SHERPA_",
@@ -50,6 +55,7 @@ class Settings(BaseSettings):
     retrieval_backend: RetrievalBackend = RetrievalBackend.MEMORY
     llm_backend: LLMBackend = LLMBackend.ECHO
     memory_backend: MemoryBackend = MemoryBackend.MEMORY
+    cache_backend: CacheBackend = CacheBackend.MEMORY
 
     qdrant_url: str = "http://localhost:6333"
     qdrant_collection: str = "sherpa_chunks"
@@ -65,6 +71,9 @@ class Settings(BaseSettings):
 
     max_tokens_per_request: int = Field(default=4096, gt=0)
     daily_token_budget: int = Field(default=1_000_000, gt=0)
+
+    llm_cache_enabled: bool = True
+    llm_cache_ttl_seconds: int = Field(default=3600, gt=0)
 
     llm_max_retries: int = Field(default=3, ge=1)
     llm_retry_base_delay: float = Field(default=0.2, ge=0)

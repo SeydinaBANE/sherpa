@@ -13,10 +13,12 @@ def _reset_singletons() -> Iterator[None]:
     dependencies.get_retriever.cache_clear()
     dependencies.get_llm.cache_clear()
     dependencies.get_study_memory.cache_clear()
+    dependencies.get_cache.cache_clear()
     yield
     dependencies.get_retriever.cache_clear()
     dependencies.get_llm.cache_clear()
     dependencies.get_study_memory.cache_clear()
+    dependencies.get_cache.cache_clear()
 
 
 @pytest.fixture

@@ -6,10 +6,20 @@ from app.application.agents.diagnoser import WeaknessDiagnoser
 from app.application.agents.planner import StudyPlanner
 from app.application.agents.quiz import QuizGenerator
 from app.application.rag.service import RagService
-from app.config import LLMBackend, MemoryBackend, RetrievalBackend, Settings, get_settings
-from app.domain.ports import EmbeddingPort, LLMPort, RetrieverPort, StudyMemoryPort
+from app.config import (
+    CacheBackend,
+    LLMBackend,
+    MemoryBackend,
+    RetrievalBackend,
+    Settings,
+    get_settings,
+)
+from app.domain.ports import CachePort, EmbeddingPort, LLMPort, RetrieverPort, StudyMemoryPort
+from app.infrastructure.cache.in_memory import InMemoryCache
+from app.infrastructure.cache.redis import RedisCache
 from app.infrastructure.embeddings.voyage import VoyageEmbedding
 from app.infrastructure.llm.anthropic import AnthropicLLM
+from app.infrastructure.llm.caching import CachingLLM
 from app.infrastructure.llm.echo import EchoLLM
 from app.infrastructure.llm.resilient import ResilientLLM
 from app.infrastructure.orchestration.assistant import AssistantOrchestrator
@@ -41,6 +51,14 @@ def get_retriever() -> RetrieverPort:
 
 
 @lru_cache(maxsize=1)
+def get_cache() -> CachePort:
+    settings = get_settings()
+    if settings.cache_backend is CacheBackend.REDIS:
+        return RedisCache(url=settings.redis_url)
+    return InMemoryCache()
+
+
+@lru_cache(maxsize=1)
 def get_llm() -> LLMPort:
     settings = get_settings()
     if settings.llm_backend is not LLMBackend.ANTHROPIC:
@@ -49,7 +67,7 @@ def get_llm() -> LLMPort:
         failure_threshold=settings.breaker_failure_threshold,
         reset_timeout=settings.breaker_reset_timeout,
     )
-    return ResilientLLM(
+    resilient = ResilientLLM(
         inner=AnthropicLLM(api_key=settings.anthropic_api_key),
         breaker=breaker,
         attempts=settings.llm_max_retries,
@@ -57,6 +75,9 @@ def get_llm() -> LLMPort:
         timeout=settings.llm_timeout_seconds,
         budget=DailyTokenBudget(settings.daily_token_budget),
     )
+    if settings.llm_cache_enabled:
+        return CachingLLM(resilient, get_cache(), ttl_seconds=settings.llm_cache_ttl_seconds)
+    return resilient
 
 
 def get_rag_service() -> RagService:

@@ -108,6 +108,7 @@ module = [
     "fitz.*",
     "langfuse.*",
     "prometheus_client.*",
+    "redis.*",
 ]
 ignore_missing_imports = true
 
