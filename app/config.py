@@ -74,6 +74,8 @@ class Settings(BaseSettings):
 
     llm_cache_enabled: bool = True
     llm_cache_ttl_seconds: int = Field(default=3600, gt=0)
+    embedding_cache_enabled: bool = True
+    embedding_cache_ttl_seconds: int = Field(default=86_400, gt=0)
 
     llm_max_retries: int = Field(default=3, ge=1)
     llm_retry_base_delay: float = Field(default=0.2, ge=0)

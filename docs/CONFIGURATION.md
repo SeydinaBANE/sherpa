@@ -48,7 +48,9 @@ Toute la configuration passe par des **variables d'environnement** préfixées `
 | Variable | Défaut | Description |
 |---|---|---|
 | `SHERPA_LLM_CACHE_ENABLED` | `true` | Active le cache des complétions (backend `anthropic`) |
-| `SHERPA_LLM_CACHE_TTL_SECONDS` | `3600` | Durée de vie d'une entrée de cache |
+| `SHERPA_LLM_CACHE_TTL_SECONDS` | `3600` | TTL d'une complétion en cache |
+| `SHERPA_EMBEDDING_CACHE_ENABLED` | `true` | Active le cache des embeddings (backend `hybrid`) |
+| `SHERPA_EMBEDDING_CACHE_TTL_SECONDS` | `86400` | TTL d'un embedding en cache |
 | `SHERPA_MAX_TOKENS_PER_REQUEST` | `4096` | Plafond de tokens par appel |
 | `SHERPA_DAILY_TOKEN_BUDGET` | `1000000` | Budget quotidien → `429` si dépassé |
 | `SHERPA_LLM_MAX_RETRIES` | `3` | Tentatives sur erreur transitoire |

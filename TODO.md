@@ -45,7 +45,7 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Retries/backoff, circuit breaker, timeout (`ResilientLLM`)
 - [x] Budget de tokens quotidien (`DailyTokenBudget` → 429)
 - [x] Cache LLM (`CachePort` + `CachingLLM`, in-memory/Redis)
-- [ ] Cache des embeddings + batching
+- [x] Cache des embeddings (`CachingEmbedding`, batch des manquants)
 - [ ] Quotas par utilisateur
 
 ## Démo

@@ -17,6 +17,7 @@ from app.config import (
 from app.domain.ports import CachePort, EmbeddingPort, LLMPort, RetrieverPort, StudyMemoryPort
 from app.infrastructure.cache.in_memory import InMemoryCache
 from app.infrastructure.cache.redis import RedisCache
+from app.infrastructure.embeddings.caching import CachingEmbedding
 from app.infrastructure.embeddings.voyage import VoyageEmbedding
 from app.infrastructure.llm.anthropic import AnthropicLLM
 from app.infrastructure.llm.caching import CachingLLM
@@ -34,7 +35,17 @@ from app.infrastructure.retrieval.qdrant import QdrantRetriever
 
 
 def _build_embedding(settings: Settings) -> EmbeddingPort:
-    return VoyageEmbedding(api_key=settings.voyage_api_key, model=settings.embedding_model)
+    embedding: EmbeddingPort = VoyageEmbedding(
+        api_key=settings.voyage_api_key, model=settings.embedding_model
+    )
+    if settings.embedding_cache_enabled:
+        return CachingEmbedding(
+            embedding,
+            get_cache(),
+            model=settings.embedding_model,
+            ttl_seconds=settings.embedding_cache_ttl_seconds,
+        )
+    return embedding
 
 
 @lru_cache(maxsize=1)

@@ -11,6 +11,9 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   Décorateur `CachingLLM` qui court-circuite les complétions identiques (clé = hash
   système+prompt+modèle+max_tokens). Activé sur le backend `anthropic` ; réglable via
   `SHERPA_LLM_CACHE_ENABLED`, `SHERPA_LLM_CACHE_TTL_SECONDS`, `SHERPA_CACHE_BACKEND`.
+- Cache des embeddings : `CachingEmbedding` (cache par texte, ne calcule que les manquants
+  en un seul batch). Activé sur le backend `hybrid` ; réglable via
+  `SHERPA_EMBEDDING_CACHE_ENABLED`, `SHERPA_EMBEDDING_CACHE_TTL_SECONDS`.
 
 ## [0.2.0] - 2026-06-11
 ### Added

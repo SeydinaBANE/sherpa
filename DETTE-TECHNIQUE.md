@@ -18,7 +18,7 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 | 7 | Routing d'intention par mots-clés | 🟢 | 🟢 | à faire |
 | 8 | Observabilité partielle (pas de Langfuse/Grafana) | 🟡 | 🟡 | à faire |
 | 9 | Evals légères (pas de RAGAS/LLM-judge) | 🟡 | 🟡 | à faire |
-| 10 | Cache LLM en place ; embeddings non cachés | 🟢 | 🟡 | partiel |
+| 10 | Cache LLM + embeddings en place | 🟢 | — | fait |
 | 11 | Graphe LangGraph recompilé par requête | 🟢 | 🟢 | à faire |
 
 ## Détail
@@ -66,9 +66,9 @@ Métriques Prometheus + logs corrélés en place ; **Langfuse** (traces LLM/coû
 context relevancy) ni de LLM-judge. → cf. [EVALS](docs/EVALS.md).
 
 ### 10 · Cache
-Le cache des **complétions LLM** est en place (`CachePort` + `CachingLLM`, in-memory/Redis).
-Reste à cacher les **embeddings** et à mesurer le gain (cf. [COST](docs/COST.md),
-[PERFORMANCE](docs/PERFORMANCE.md)).
+Cache des **complétions LLM** (`CachingLLM`) et des **embeddings** (`CachingEmbedding`) en
+place (in-memory/Redis). Reste à **mesurer le gain** sous charge réelle
+(cf. [COST](docs/COST.md), [PERFORMANCE](docs/PERFORMANCE.md)).
 
 ### 11 · Compilation du graphe
 `get_assistant_orchestrator` reconstruit et `compile()` le graphe LangGraph à chaque
