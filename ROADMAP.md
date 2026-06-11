@@ -19,9 +19,11 @@
 - ✅ Mémoire étudiant persistée (`StudyMemoryPort`, SQLAlchemy + Alembic, `diagnose-from-history`).
 - ⬜ Checkpointer LangGraph Postgres (état conversationnel).
 
-## Phase 3 — Evals + Observabilité ⬜
-- RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.
-- Langfuse (traces, coûts) + Prometheus/Grafana (latence, throughput), SLO/SLI.
+## Phase 3 — Evals + Observabilité 🔶
+- ✅ Métriques Prometheus (`/metrics`) + middleware request-id + access logging structuré.
+- ⬜ Langfuse (traces LLM, coûts).
+- ⬜ RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.
+- ⬜ Dashboards Grafana + SLO/SLI + alerting.
 
 ## Phase 4 — Optimisation & résilience ⬜
 - Cache Redis (réponses/embeddings), batching embeddings.

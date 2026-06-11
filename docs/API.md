@@ -11,6 +11,10 @@ La spécification OpenAPI est générée automatiquement par FastAPI :
 ### `GET /healthz`
 Sonde de vivacité. Réponse : `{ "status": "ok", "version": "...", "environment": "local" }`.
 
+### `GET /metrics`
+Métriques Prometheus (text/plain) : `sherpa_http_requests_total`,
+`sherpa_http_request_duration_seconds`. Toutes les réponses portent un en-tête `X-Request-ID`.
+
 ### `POST /ingest`
 Indexe un document dans le corpus d'un cours.
 

@@ -25,6 +25,9 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   `SqlStudyMemory` (SQLAlchemy async). Endpoints `POST /memory/answers`, `GET /memory/history`,
   `POST /agents/diagnose-from-history`. Migrations Alembic (`study_events`). Backend via
   `SHERPA_MEMORY_BACKEND` (`memory`/`sql`).
+- Observabilité (Phase 3) : métriques Prometheus sur `GET /metrics` (compteur + histogramme
+  de latence, label `path` = template de route), middleware `X-Request-ID` corrélé aux logs
+  structlog, log d'accès par requête.
 
 ## [0.1.0] - 2026-06-11
 ### Added

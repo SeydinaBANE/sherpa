@@ -35,9 +35,11 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [ ] Checkpointer LangGraph Postgres (état conversationnel)
 
 ## Phase 3 — Evals + Observabilité
+- [x] Métriques Prometheus (`/metrics`) + middleware request-id + access logging
+- [ ] Traces LLM Langfuse (coûts/latence par appel)
+- [ ] Dashboards Grafana + SLO/SLI + alerting
 - [ ] Intégration RAGAS + LLM-judge (Claude Opus)
 - [ ] Dataset d'eval versionné + seuils bloquants en CI
-- [ ] Langfuse + Prometheus/Grafana + SLO/SLI + alerting
 
 ## Phase 4 — Optimisation & résilience
 - [ ] Cache Redis + batching embeddings
