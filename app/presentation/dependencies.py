@@ -11,10 +11,13 @@ from app.domain.ports import EmbeddingPort, LLMPort, RetrieverPort, StudyMemoryP
 from app.infrastructure.embeddings.voyage import VoyageEmbedding
 from app.infrastructure.llm.anthropic import AnthropicLLM
 from app.infrastructure.llm.echo import EchoLLM
+from app.infrastructure.llm.resilient import ResilientLLM
 from app.infrastructure.orchestration.assistant import AssistantOrchestrator
 from app.infrastructure.persistence.engine import create_engine, create_session_factory
 from app.infrastructure.persistence.memory_inmemory import InMemoryStudyMemory
 from app.infrastructure.persistence.memory_sql import SqlStudyMemory
+from app.infrastructure.resilience.budget import DailyTokenBudget
+from app.infrastructure.resilience.circuit_breaker import CircuitBreaker
 from app.infrastructure.retrieval.hybrid import HybridRetriever
 from app.infrastructure.retrieval.in_memory import InMemoryRetriever
 from app.infrastructure.retrieval.qdrant import QdrantRetriever
@@ -40,9 +43,20 @@ def get_retriever() -> RetrieverPort:
 @lru_cache(maxsize=1)
 def get_llm() -> LLMPort:
     settings = get_settings()
-    if settings.llm_backend is LLMBackend.ANTHROPIC:
-        return AnthropicLLM(api_key=settings.anthropic_api_key)
-    return EchoLLM()
+    if settings.llm_backend is not LLMBackend.ANTHROPIC:
+        return EchoLLM()
+    breaker = CircuitBreaker(
+        failure_threshold=settings.breaker_failure_threshold,
+        reset_timeout=settings.breaker_reset_timeout,
+    )
+    return ResilientLLM(
+        inner=AnthropicLLM(api_key=settings.anthropic_api_key),
+        breaker=breaker,
+        attempts=settings.llm_max_retries,
+        base_delay=settings.llm_retry_base_delay,
+        timeout=settings.llm_timeout_seconds,
+        budget=DailyTokenBudget(settings.daily_token_budget),
+    )
 
 
 def get_rag_service() -> RagService:

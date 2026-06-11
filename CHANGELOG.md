@@ -30,6 +30,9 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   structlog, log d'accès par requête.
 - UI de démo : page unique (HTML/CSS/JS vanilla, sans build) servie sur `GET /` — ingestion
   texte/fichier + chat branché sur `/assistant` (rendu answer/quiz/plan + citations).
+- Résilience (Phase 4) : `ResilientLLM` enveloppe le LLM avec timeout, retries + backoff
+  exponentiel (`retry_async`), circuit breaker (`CircuitBreaker`) et garde-fou de budget
+  (`DailyTokenBudget` → 429). Activé sur le backend `anthropic`, réglable par config.
 
 ## [0.1.0] - 2026-06-11
 ### Added

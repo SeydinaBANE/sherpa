@@ -25,9 +25,10 @@
 - ⬜ RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.
 - ⬜ Dashboards Grafana + SLO/SLI + alerting.
 
-## Phase 4 — Optimisation & résilience ⬜
-- Cache Redis (réponses/embeddings), batching embeddings.
-- Retries/backoff, circuit breaker, quotas & budgets coûts.
+## Phase 4 — Optimisation & résilience 🔶
+- ✅ Retries/backoff, circuit breaker, timeout (`ResilientLLM`) + budget tokens (`DailyTokenBudget`).
+- ⬜ Cache Redis (réponses/embeddings), batching embeddings.
+- ⬜ Quotas par utilisateur.
 
 ## Phase 5 — Déploiement ⬜
 - CI/CD complet, scans sécurité (deps, image, secrets), conformité RGPD.

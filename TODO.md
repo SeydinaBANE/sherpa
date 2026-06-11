@@ -42,9 +42,10 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [ ] Dataset d'eval versionné + seuils bloquants en CI
 
 ## Phase 4 — Optimisation & résilience
+- [x] Retries/backoff, circuit breaker, timeout (`ResilientLLM`)
+- [x] Budget de tokens quotidien (`DailyTokenBudget` → 429)
 - [ ] Cache Redis + batching embeddings
-- [ ] Retries/backoff, circuit breaker (tenacity)
-- [ ] Quotas par utilisateur + budgets coûts
+- [ ] Quotas par utilisateur
 
 ## Démo
 - [x] UI de démo (page unique servie sur `/` : ingestion + chat tutor/quiz/plan)

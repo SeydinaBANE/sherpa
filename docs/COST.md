@@ -8,11 +8,13 @@
 3. **Batching** des embeddings à l'ingestion.
 4. **Contrôle de contexte** : top-k borné, chunks dédupliqués, `max_tokens` plafonné.
 
-## Garde-fous
+## Garde-fous ✅
 
 - `SHERPA_MAX_TOKENS_PER_REQUEST` : plafond par requête.
-- `SHERPA_DAILY_TOKEN_BUDGET` : budget quotidien ; dépassement → `BudgetExceededError` (429).
-- Quotas par utilisateur (Phase 4).
+- `SHERPA_DAILY_TOKEN_BUDGET` : budget quotidien appliqué par `DailyTokenBudget`
+  (`app/infrastructure/resilience/budget.py`) ; dépassement → `BudgetExceededError` (429).
+- **Résilience** (`ResilientLLM`) : timeout, retries + backoff exponentiel, circuit breaker.
+- Quotas par utilisateur : à venir.
 
 ## Suivi
 
