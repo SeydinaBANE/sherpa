@@ -6,12 +6,15 @@ from app.application.agents.diagnoser import WeaknessDiagnoser
 from app.application.agents.planner import StudyPlanner
 from app.application.agents.quiz import QuizGenerator
 from app.application.rag.service import RagService
-from app.config import LLMBackend, RetrievalBackend, Settings, get_settings
-from app.domain.ports import EmbeddingPort, LLMPort, RetrieverPort
+from app.config import LLMBackend, MemoryBackend, RetrievalBackend, Settings, get_settings
+from app.domain.ports import EmbeddingPort, LLMPort, RetrieverPort, StudyMemoryPort
 from app.infrastructure.embeddings.voyage import VoyageEmbedding
 from app.infrastructure.llm.anthropic import AnthropicLLM
 from app.infrastructure.llm.echo import EchoLLM
 from app.infrastructure.orchestration.assistant import AssistantOrchestrator
+from app.infrastructure.persistence.engine import create_engine, create_session_factory
+from app.infrastructure.persistence.memory_inmemory import InMemoryStudyMemory
+from app.infrastructure.persistence.memory_sql import SqlStudyMemory
 from app.infrastructure.retrieval.hybrid import HybridRetriever
 from app.infrastructure.retrieval.in_memory import InMemoryRetriever
 from app.infrastructure.retrieval.qdrant import QdrantRetriever
@@ -84,6 +87,15 @@ def get_weakness_diagnoser() -> WeaknessDiagnoser:
         max_tokens=settings.max_tokens_per_request,
         top_k=settings.top_k,
     )
+
+
+@lru_cache(maxsize=1)
+def get_study_memory() -> StudyMemoryPort:
+    settings = get_settings()
+    if settings.memory_backend is MemoryBackend.SQL:
+        engine = create_engine(settings.database_url)
+        return SqlStudyMemory(create_session_factory(engine))
+    return InMemoryStudyMemory()
 
 
 def get_assistant_orchestrator() -> AssistantOrchestrator:

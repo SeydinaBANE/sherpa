@@ -21,6 +21,10 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   `/agents/study-plan`, `/agents/diagnose`. Sortie LLM invalide → `502` (`AgentOutputError`).
 - Orchestration LangGraph : `AssistantOrchestrator` (graphe routant `tutor`/`quiz`/`plan`
   selon `classify_intent`) exposé via `POST /assistant`. Extra `agents` (`langgraph`).
+- Mémoire étudiant : `StudyMemoryPort` + adapters `InMemoryStudyMemory` (défaut) et
+  `SqlStudyMemory` (SQLAlchemy async). Endpoints `POST /memory/answers`, `GET /memory/history`,
+  `POST /agents/diagnose-from-history`. Migrations Alembic (`study_events`). Backend via
+  `SHERPA_MEMORY_BACKEND` (`memory`/`sql`).
 
 ## [0.1.0] - 2026-06-11
 ### Added

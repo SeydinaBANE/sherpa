@@ -74,6 +74,19 @@ Orchestration LangGraph : route un message libre vers l'agent adapté.
 
 `intent` ∈ `tutor` | `quiz` | `plan` ; seul le champ correspondant est renseigné.
 
+### `POST /agents/diagnose-from-history`
+`{ "student_id": "s1", "course_id": "bio" }` → diagnostic basé sur l'historique stocké
+(`404` si aucun historique).
+
+## Mémoire étudiant
+
+### `POST /memory/answers`
+`{ "student_id": "s1", "course_id": "bio", "answers": [{ "question": "...", "correct": false }] }`
+→ `201 { "recorded": 1 }`.
+
+### `GET /memory/history?student_id=s1&course_id=bio`
+→ `{ "student_id", "course_id", "events": [{ "question", "correct", "created_at" }] }`.
+
 ## Codes d'erreur
 
 | Code | Signification |

@@ -16,7 +16,8 @@
 ## Phase 2 — Agents 🔶
 - ✅ Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés, JSON validé) + endpoints.
 - ✅ Câblage LangGraph (`AssistantOrchestrator`, routing d'intention, endpoint `/assistant`).
-- ⬜ Mémoire étudiant persistée (checkpointer Postgres).
+- ✅ Mémoire étudiant persistée (`StudyMemoryPort`, SQLAlchemy + Alembic, `diagnose-from-history`).
+- ⬜ Checkpointer LangGraph Postgres (état conversationnel).
 
 ## Phase 3 — Evals + Observabilité ⬜
 - RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.

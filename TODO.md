@@ -23,14 +23,16 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [x] Endpoint d'upload de fichier (multipart) branché sur `load_bytes`
 - [ ] Test d'intégration Qdrant (testcontainers)
 - [ ] Reranking cross-encoder
-- [ ] Persistance métadonnées chunks (Postgres + Alembic)
+- [x] Persistance (Postgres + Alembic) — mémoire étudiant `study_events`
+- [ ] Persistance métadonnées chunks (Postgres)
 
 ## Phase 2 — Agents
 - [x] Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés + JSON validé)
 - [x] Endpoints `/agents/quiz`, `/agents/study-plan`, `/agents/diagnose`
 - [x] Câblage LangGraph (`AssistantOrchestrator` + endpoint `/assistant`)
 - [ ] Routing d'intention par LLM (fallback règles)
-- [ ] Checkpointer Postgres + mémoire étudiant (suivi des lacunes)
+- [x] Mémoire étudiant persistée (`study_events`) + `diagnose-from-history`
+- [ ] Checkpointer LangGraph Postgres (état conversationnel)
 
 ## Phase 3 — Evals + Observabilité
 - [ ] Intégration RAGAS + LLM-judge (Claude Opus)

@@ -21,6 +21,11 @@ class LLMBackend(StrEnum):
     ANTHROPIC = "anthropic"
 
 
+class MemoryBackend(StrEnum):
+    MEMORY = "memory"
+    SQL = "sql"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="SHERPA_",
@@ -44,6 +49,7 @@ class Settings(BaseSettings):
 
     retrieval_backend: RetrievalBackend = RetrievalBackend.MEMORY
     llm_backend: LLMBackend = LLMBackend.ECHO
+    memory_backend: MemoryBackend = MemoryBackend.MEMORY
 
     qdrant_url: str = "http://localhost:6333"
     qdrant_collection: str = "sherpa_chunks"
