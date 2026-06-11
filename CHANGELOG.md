@@ -16,6 +16,9 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
   avec wiring dans la composition root ; défaut `memory`/`echo` (hors-ligne).
 - Endpoint `POST /ingest/file` (multipart) : upload `.pdf`/`.txt`/`.md` → ingestion
   (`load_bytes`, PDF en flux), `415` si type non supporté.
+- Phase 2 (agents) : `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (couche application,
+  groundés via retrieval, sorties JSON validées Pydantic). Endpoints `POST /agents/quiz`,
+  `/agents/study-plan`, `/agents/diagnose`. Sortie LLM invalide → `502` (`AgentOutputError`).
 
 ## [0.1.0] - 2026-06-11
 ### Added

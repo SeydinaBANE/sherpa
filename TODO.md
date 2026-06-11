@@ -26,9 +26,10 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [ ] Persistance métadonnées chunks (Postgres + Alembic)
 
 ## Phase 2 — Agents
-- [ ] Graphe LangGraph + état + checkpointer Postgres
-- [ ] Agents `quiz_generator`, `study_planner`, `weakness_diagnoser`
-- [ ] Mémoire étudiant (suivi des lacunes)
+- [x] Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés + JSON validé)
+- [x] Endpoints `/agents/quiz`, `/agents/study-plan`, `/agents/diagnose`
+- [ ] Câblage LangGraph (graphe + routing + état partagé)
+- [ ] Checkpointer Postgres + mémoire étudiant (suivi des lacunes)
 
 ## Phase 3 — Evals + Observabilité
 - [ ] Intégration RAGAS + LLM-judge (Claude Opus)

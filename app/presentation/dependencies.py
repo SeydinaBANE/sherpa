@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from app.application.agents.diagnoser import WeaknessDiagnoser
+from app.application.agents.planner import StudyPlanner
+from app.application.agents.quiz import QuizGenerator
 from app.application.rag.service import RagService
 from app.config import LLMBackend, RetrievalBackend, Settings, get_settings
 from app.domain.ports import EmbeddingPort, LLMPort, RetrieverPort
@@ -44,6 +47,39 @@ def get_rag_service() -> RagService:
         retriever=get_retriever(),
         llm=get_llm(),
         model=settings.llm_model_standard,
+        max_tokens=settings.max_tokens_per_request,
+        top_k=settings.top_k,
+    )
+
+
+def get_quiz_generator() -> QuizGenerator:
+    settings = get_settings()
+    return QuizGenerator(
+        retriever=get_retriever(),
+        llm=get_llm(),
+        model=settings.llm_model_standard,
+        max_tokens=settings.max_tokens_per_request,
+        top_k=settings.top_k,
+    )
+
+
+def get_study_planner() -> StudyPlanner:
+    settings = get_settings()
+    return StudyPlanner(
+        retriever=get_retriever(),
+        llm=get_llm(),
+        model=settings.llm_model_standard,
+        max_tokens=settings.max_tokens_per_request,
+        top_k=settings.top_k,
+    )
+
+
+def get_weakness_diagnoser() -> WeaknessDiagnoser:
+    settings = get_settings()
+    return WeaknessDiagnoser(
+        retriever=get_retriever(),
+        llm=get_llm(),
+        model=settings.llm_model_deep,
         max_tokens=settings.max_tokens_per_request,
         top_k=settings.top_k,
     )

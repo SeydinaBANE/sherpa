@@ -6,12 +6,13 @@ from fastapi.responses import JSONResponse
 from app import __version__
 from app.config import get_settings
 from app.domain.exceptions import (
+    AgentOutputError,
     BudgetExceededError,
     CourseNotFoundError,
     NoRelevantContextError,
 )
 from app.infrastructure.observability.logging import configure_logging
-from app.presentation.routers import health, rag
+from app.presentation.routers import agents, health, rag
 
 
 def _register_exception_handlers(app: FastAPI) -> None:
@@ -27,6 +28,10 @@ def _register_exception_handlers(app: FastAPI) -> None:
     async def _budget(_: Request, exc: BudgetExceededError) -> JSONResponse:
         return JSONResponse(status_code=429, content={"detail": str(exc)})
 
+    @app.exception_handler(AgentOutputError)
+    async def _agent_output(_: Request, exc: AgentOutputError) -> JSONResponse:
+        return JSONResponse(status_code=502, content={"detail": str(exc)})
+
 
 def create_app() -> FastAPI:
     settings = get_settings()
@@ -38,5 +43,6 @@ def create_app() -> FastAPI:
     )
     app.include_router(health.router)
     app.include_router(rag.router)
+    app.include_router(agents.router)
     _register_exception_handlers(app)
     return app

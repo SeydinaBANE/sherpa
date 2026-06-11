@@ -1,20 +1,27 @@
 # Agents (Phase 2)
 
-> Cible : orchestration via **LangGraph**. Ce document décrit le design prévu.
-
 ## Principe
 
-Un graphe d'états où chaque nœud est un agent outillé. Le retrieval RAG est un outil
-partagé. La mémoire étudiant est persistée (checkpointer Postgres) pour l'adaptation.
+Les **agents sont des services de la couche application** (`app/application/agents/`) qui
+s'appuient sur les ports (`RetrieverPort`, `LLMPort`) : ils sont donc testables hors-ligne.
+Chaque agent (1) ancre sa réponse via le retrieval, (2) demande au LLM une sortie **JSON
+structurée**, (3) la valide en modèle Pydantic (`parse_model`). Une sortie LLM invalide
+lève `AgentOutputError` → HTTP 502.
 
-## Agents
+## Agents (implémentés)
 
-| Agent | Rôle | Modèle (routing) |
-|---|---|---|
-| `tutor` | Q&A pédagogique ancré (RAG) | sonnet |
-| `quiz_generator` | Génère un quiz depuis le corpus | sonnet |
-| `study_planner` | Construit un plan de révision | sonnet |
-| `weakness_diagnoser` | Identifie les lacunes via l'historique | opus |
+| Agent | Rôle | Modèle (routing) | Endpoint |
+|---|---|---|---|
+| `tutor` (RAG) | Q&A pédagogique ancré | sonnet | `POST /ask` |
+| `QuizGenerator` | Quiz QCM depuis le corpus | sonnet | `POST /agents/quiz` |
+| `StudyPlanner` | Plan de révision jour par jour | sonnet | `POST /agents/study-plan` |
+| `WeaknessDiagnoser` | Lacunes + recommandation | opus | `POST /agents/diagnose` |
+
+## Orchestration LangGraph (prochaine itération)
+
+La logique métier des agents étant isolée et testée, l'étape suivante est de les **câbler
+dans un graphe LangGraph** (routing + état partagé + checkpointer Postgres pour la mémoire
+étudiant). Le graphe sera un adapter d'infrastructure qui réutilise ces services tels quels.
 
 ## Graphe (esquisse)
 
@@ -33,5 +40,6 @@ input → │ router   │ → tutor ─────────────┐
 
 ## Garde-fous
 
-- Chaque agent qui répond sur le fond passe par le retrieval ancré.
-- Budgets de tokens par exécution de graphe (voir [COST.md](COST.md)).
+- Chaque agent passe par le retrieval ancré (`retrieve_context`) ; pas de corpus → 422.
+- Sortie LLM strictement validée (Pydantic) ; sortie invalide → 502 (`AgentOutputError`).
+- Budgets de tokens par exécution (voir [COST.md](COST.md)).

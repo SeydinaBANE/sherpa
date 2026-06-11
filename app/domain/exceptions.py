@@ -14,6 +14,12 @@ class NoRelevantContextError(SherpaError):
         self.question = question
 
 
+class AgentOutputError(SherpaError):
+    def __init__(self, detail: str) -> None:
+        super().__init__(f"Sortie d'agent invalide: {detail}")
+        self.detail = detail
+
+
 class BudgetExceededError(SherpaError):
     def __init__(self, requested: int, budget: int) -> None:
         super().__init__(f"Budget tokens dépassé: {requested} > {budget}")

@@ -13,9 +13,10 @@
 - Retrieval hybride (dense + BM25), fusion RRF, reranking.
 - Adapter Claude (routing multi-modèle) en remplacement de `EchoLLM`.
 
-## Phase 2 — Agents ⬜
-- LangGraph : `tutor`, `quiz_generator`, `study_planner`, `weakness_diagnoser`.
-- Mémoire étudiant persistée (checkpointer Postgres).
+## Phase 2 — Agents 🔶
+- ✅ Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés, JSON validé) + endpoints.
+- ⬜ Câblage LangGraph (graphe, routing, état partagé).
+- ⬜ Mémoire étudiant persistée (checkpointer Postgres).
 
 ## Phase 3 — Evals + Observabilité ⬜
 - RAGAS + LLM-judge sur golden dataset versionné, seuils bloquants en CI.

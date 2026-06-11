@@ -49,6 +49,23 @@ Réponse `200` :
 ```
 `422` si aucun contexte pertinent (refus gracieux).
 
+## Agents
+
+### `POST /agents/quiz`
+`{ "course_id": "bio", "topic": "photosynthèse", "num_questions": 5 }` →
+`{ "course_id", "topic", "questions": [{ "question", "choices", "answer_index", "explanation" }] }`.
+
+### `POST /agents/study-plan`
+`{ "course_id": "bio", "topic": "photosynthèse", "days": 7 }` →
+`{ "course_id", "items": [{ "day", "topic", "activities": [...] }] }`.
+
+### `POST /agents/diagnose`
+`{ "course_id": "bio", "answers": [{ "question": "...", "correct": false }] }` →
+`{ "course_id", "weak_topics": [...], "recommendation": "..." }`.
+
+> Les agents nécessitent un corpus indexé (sinon `422`) et le backend LLM `anthropic`
+> pour des sorties utiles ; une sortie LLM non conforme renvoie `502`.
+
 ## Codes d'erreur
 
 | Code | Signification |
@@ -57,3 +74,4 @@ Réponse `200` :
 | 422 | Aucun contexte pertinent (`NoRelevantContextError`) |
 | 404 | Cours introuvable (`CourseNotFoundError`) |
 | 429 | Budget de tokens dépassé (`BudgetExceededError`) |
+| 502 | Sortie d'agent LLM invalide (`AgentOutputError`) |
