@@ -15,7 +15,8 @@ protection des données est un principe produit, pas une option.
 - **Accès / portabilité** : export des données d'un étudiant sur demande.
 - **Rectification** : correction des données inexactes.
 - **Effacement** : `DELETE /courses/{course_id}` supprime les vecteurs (retriever) et les
-  métadonnées de chunks (Postgres) ; suppression du compte/historique étudiant à compléter.
+  métadonnées de chunks ; `DELETE /students/{student_id}` supprime tout l'historique de
+  l'étudiant (`study_events`).
 - **Limitation / opposition** : selon les cas.
 
 ## Mesures techniques

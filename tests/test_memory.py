@@ -30,6 +30,14 @@ async def test_in_memory_record_and_filter_history() -> None:
     assert all(event.student_id == "s1" for event in history)
 
 
+async def test_in_memory_delete_student() -> None:
+    memory = InMemoryStudyMemory()
+    await memory.record(_events())
+    assert await memory.delete_student("s1") == 2
+    assert await memory.history("s1", "c1") == []
+    assert len(await memory.history("s2", "c1")) == 1
+
+
 @pytest.fixture
 async def sql_memory() -> AsyncIterator[SqlStudyMemory]:
     engine = create_engine("sqlite+aiosqlite://")
@@ -46,3 +54,10 @@ async def test_sql_record_and_history(sql_memory: SqlStudyMemory) -> None:
 
 async def test_sql_record_empty_is_noop(sql_memory: SqlStudyMemory) -> None:
     assert await sql_memory.record([]) == 0
+
+
+async def test_sql_delete_student(sql_memory: SqlStudyMemory) -> None:
+    await sql_memory.record(_events())
+    assert await sql_memory.delete_student("s1") == 2
+    assert await sql_memory.history("s1", "c1") == []
+    assert len(await sql_memory.history("s2", "c1")) == 1

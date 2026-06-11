@@ -13,7 +13,16 @@ from app.domain.exceptions import (
 )
 from app.infrastructure.observability.logging import configure_logging
 from app.presentation.middleware import observability_middleware
-from app.presentation.routers import agents, assistant, courses, health, memory, rag, web
+from app.presentation.routers import (
+    agents,
+    assistant,
+    courses,
+    health,
+    memory,
+    rag,
+    students,
+    web,
+)
 from app.presentation.security import rate_limit, require_api_key
 
 
@@ -52,5 +61,6 @@ def create_app() -> FastAPI:
     app.include_router(agents.router, dependencies=protected)
     app.include_router(assistant.router, dependencies=protected)
     app.include_router(memory.router, dependencies=protected)
+    app.include_router(students.router, dependencies=protected)
     _register_exception_handlers(app)
     return app

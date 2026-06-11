@@ -107,6 +107,10 @@ Liste les métadonnées des chunks indexés d'un cours →
 ### `GET /memory/history?student_id=s1&course_id=bio`
 → `{ "student_id", "course_id", "events": [{ "question", "correct", "created_at" }] }`.
 
+### `DELETE /students/{student_id}`
+**Droit à l'effacement** : supprime tout l'historique d'un étudiant →
+`{ "student_id", "events_deleted" }`.
+
 ## Codes d'erreur
 
 | Code | Signification |

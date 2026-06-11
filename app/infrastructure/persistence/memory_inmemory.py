@@ -19,3 +19,9 @@ class InMemoryStudyMemory:
             for event in self._events
             if event.student_id == student_id and event.course_id == course_id
         ]
+
+    async def delete_student(self, student_id: str) -> int:
+        kept = [event for event in self._events if event.student_id != student_id]
+        removed = len(self._events) - len(kept)
+        self._events = kept
+        return removed
