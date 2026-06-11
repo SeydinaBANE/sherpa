@@ -92,8 +92,9 @@ make precommit   # tous les hooks (ruff, mypy, bandit, gitleaks, conventional co
 |---|---|
 | [PROJECT.md](PROJECT.md) | Vision, personae, périmètre, métriques |
 | [ROADMAP.md](ROADMAP.md) · [TODO.md](TODO.md) | Jalons & backlog par phases |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Workflow git & conventions |
-| [docs/](docs/) | Architecture, ADR, RAG, agents, evals, observabilité, sécurité, RGPD, runbook… |
+| [DETTE-TECHNIQUE.md](DETTE-TECHNIQUE.md) | Registre de dette technique |
+| [CONTRIBUTING.md](CONTRIBUTING.md) · [SUPPORT.md](SUPPORT.md) | Workflow git & obtenir de l'aide |
+| [docs/](docs/README.md) | Architecture, ADR, configuration, tests, release, evals, RGPD, runbook… |
 
 ## Licence
 
