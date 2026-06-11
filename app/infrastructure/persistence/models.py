@@ -19,3 +19,13 @@ class StudyEventRow(Base):
     question: Mapped[str] = mapped_column(String(2000))
     correct: Mapped[bool] = mapped_column(Boolean)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ChunkMetaRow(Base):
+    __tablename__ = "chunk_meta"
+
+    chunk_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    course_id: Mapped[str] = mapped_column(String(128), index=True)
+    source: Mapped[str] = mapped_column(String(256))
+    ordinal: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

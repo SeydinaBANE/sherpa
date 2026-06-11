@@ -34,6 +34,12 @@ class InMemoryRetriever:
             added += 1
         return added
 
+    async def delete_course(self, course_id: str) -> int:
+        chunks = self._by_course.pop(course_id, [])
+        for chunk in chunks:
+            self._known_ids.discard(chunk.chunk_id)
+        return len(chunks)
+
     async def retrieve(self, course_id: str, query: str, top_k: int) -> list[RetrievedChunk]:
         corpus = self._by_course.get(course_id, [])
         if not corpus:

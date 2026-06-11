@@ -21,6 +21,8 @@ class _QdrantClient(Protocol):
 
     def upsert(self, collection_name: str, points: object) -> object: ...
 
+    def delete(self, collection_name: str, points_selector: object) -> object: ...
+
     def search(
         self,
         *,
@@ -107,15 +109,26 @@ class QdrantRetriever:
         self._get_client().upsert(collection_name=self._collection, points=points)
         return len(points)
 
-    async def retrieve(self, course_id: str, query: str, top_k: int) -> list[RetrievedChunk]:
-        vectors = await self._embeddings.embed([query])
+    @staticmethod
+    def _course_filter(course_id: str) -> object:
         from qdrant_client import models as qmodels
 
-        query_filter = qmodels.Filter(
+        return qmodels.Filter(
             must=[
                 qmodels.FieldCondition(key="course_id", match=qmodels.MatchValue(value=course_id))
             ]
         )
+
+    async def delete_course(self, course_id: str) -> int:
+        self._get_client().delete(
+            collection_name=self._collection,
+            points_selector=self._course_filter(course_id),
+        )
+        return 0
+
+    async def retrieve(self, course_id: str, query: str, top_k: int) -> list[RetrievedChunk]:
+        vectors = await self._embeddings.embed([query])
+        query_filter = self._course_filter(course_id)
         points = self._get_client().search(
             collection_name=self._collection,
             query_vector=vectors[0],

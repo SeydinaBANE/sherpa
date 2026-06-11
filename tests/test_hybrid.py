@@ -16,6 +16,10 @@ class _StubRetriever:
     async def retrieve(self, course_id: str, query: str, top_k: int) -> list[RetrievedChunk]:
         return self._results[:top_k]
 
+    async def delete_course(self, course_id: str) -> int:
+        self.deleted = getattr(self, "deleted", 0) + 1
+        return 1
+
 
 def _item(text: str, score: float) -> RetrievedChunk:
     return RetrievedChunk(chunk=Chunk.create("c1", "src", 0, text), score=score)

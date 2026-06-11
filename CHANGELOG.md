@@ -7,6 +7,19 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-11
+### Added
+- Persistance des métadonnées de chunks : `ChunkMetadataPort` + adapters `InMemoryChunkMetadata`
+  (défaut) et `SqlChunkMetadata` (SQLAlchemy async), migration Alembic `chunk_meta` (0002).
+  Enregistrement à l'ingestion.
+- Suppression de cours (RGPD, droit à l'effacement) : `delete_course` sur `RetrieverPort`
+  (in-memory, Qdrant, hybride) + endpoints `GET /courses/{id}/chunks` et `DELETE /courses/{id}`.
+- Effacement étudiant (RGPD) : `delete_student` sur `StudyMemoryPort` (in-memory + SQL) +
+  endpoint `DELETE /students/{id}` (supprime tout l'historique).
+### Changed
+- Orchestrateur LangGraph mémoïsé (`lru_cache`) : le graphe est compilé une seule fois
+  par processus au lieu d'être reconstruit à chaque requête.
+
 ## [0.3.0] - 2026-06-11
 ### Added
 - Cache LLM : `CachePort` + adapters `InMemoryCache` (défaut, TTL) et `RedisCache` (async).
@@ -62,7 +75,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Docker multi-stage, docker-compose (qdrant / postgres / redis), CI GitHub Actions.
 - Documentation complète (PROJECT, ROADMAP, docs/*, ADR).
 
-[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/SeydinaBANE/sherpa/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/SeydinaBANE/sherpa/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/SeydinaBANE/sherpa/releases/tag/v0.1.0

@@ -24,6 +24,11 @@ class HybridRetriever:
         await self._sparse.index(chunks)
         return dense_added
 
+    async def delete_course(self, course_id: str) -> int:
+        deleted = await self._dense.delete_course(course_id)
+        await self._sparse.delete_course(course_id)
+        return deleted
+
     async def retrieve(self, course_id: str, query: str, top_k: int) -> list[RetrievedChunk]:
         dense = await self._dense.retrieve(course_id, query, top_k)
         sparse = await self._sparse.retrieve(course_id, query, top_k)

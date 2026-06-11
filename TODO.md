@@ -24,7 +24,7 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 - [ ] Test d'intégration Qdrant (testcontainers)
 - [ ] Reranking cross-encoder
 - [x] Persistance (Postgres + Alembic) — mémoire étudiant `study_events`
-- [ ] Persistance métadonnées chunks (Postgres)
+- [x] Persistance métadonnées chunks (`chunk_meta`) + suppression de cours (RGPD)
 
 ## Phase 2 — Agents
 - [x] Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés + JSON validé)

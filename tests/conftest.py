@@ -14,8 +14,11 @@ def _clear_caches() -> None:
     dependencies.get_retriever.cache_clear()
     dependencies.get_llm.cache_clear()
     dependencies.get_study_memory.cache_clear()
+    dependencies.get_chunk_store.cache_clear()
+    dependencies._get_session_factory.cache_clear()
     dependencies.get_cache.cache_clear()
     dependencies.get_rate_limiter.cache_clear()
+    dependencies.get_assistant_orchestrator.cache_clear()
 
 
 @pytest.fixture(autouse=True)

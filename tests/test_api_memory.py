@@ -37,6 +37,12 @@ async def test_record_then_history(client: AsyncClient) -> None:
     assert history.status_code == 200
     assert len(history.json()["events"]) == 1
 
+    deleted = await client.delete("/students/s1")
+    assert deleted.status_code == 200
+    assert deleted.json()["events_deleted"] == 1
+    after = await client.get("/memory/history", params={"student_id": "s1", "course_id": "c1"})
+    assert after.json()["events"] == []
+
 
 async def _client_with_history() -> AsyncIterator[AsyncClient]:
     memory = InMemoryStudyMemory()

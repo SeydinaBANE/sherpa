@@ -1,11 +1,17 @@
 from __future__ import annotations
 
-from sqlalchemy import select
+from typing import Protocol, cast
+
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.domain.memory import StudyEvent
 
 from .models import StudyEventRow
+
+
+class _HasRowcount(Protocol):
+    rowcount: int
 
 
 class SqlStudyMemory:
@@ -52,3 +58,11 @@ class SqlStudyMemory:
             )
             for row in rows
         ]
+
+    async def delete_student(self, student_id: str) -> int:
+        async with self._session_factory() as session:
+            result = await session.execute(
+                delete(StudyEventRow).where(StudyEventRow.student_id == student_id)
+            )
+            await session.commit()
+        return cast(_HasRowcount, result).rowcount or 0

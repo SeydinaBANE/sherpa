@@ -13,13 +13,13 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 | 2 | État applicatif **mono-process** (défauts in-memory) | 🔴 | 🟡 | par design (dev) |
 | 3 | AuthN (clé API) + rate-limit en place ; pas d'autorisation fine | 🟡 | 🟡 | partiel |
 | 4 | Budget tokens approximatif & non distribué | 🟡 | 🟡 | à faire |
-| 5 | Métadonnées de chunks non persistées | 🟡 | 🟡 | à faire |
+| 5 | Métadonnées de chunks persistées + effacement RGPD | 🟢 | — | fait |
 | 6 | Pas de reranking cross-encoder | 🟡 | 🟡 | à faire |
 | 7 | Routing d'intention par mots-clés | 🟢 | 🟢 | à faire |
 | 8 | Observabilité partielle (pas de Langfuse/Grafana) | 🟡 | 🟡 | à faire |
 | 9 | Evals légères (pas de RAGAS/LLM-judge) | 🟡 | 🟡 | à faire |
 | 10 | Cache LLM + embeddings en place | 🟢 | — | fait |
-| 11 | Graphe LangGraph recompilé par requête | 🟢 | 🟢 | à faire |
+| 11 | Graphe LangGraph compilé une fois (mémoïsé) | 🟢 | — | fait |
 
 ## Détail
 
@@ -47,9 +47,9 @@ réelle ; compteur **en mémoire par processus**, remis à zéro au redémarrage
 → Compter les tokens réellement consommés + backend partagé (Redis) pour le multi-instance.
 
 ### 5 · Métadonnées de chunks
-Seule la table `study_events` est persistée. Les chunks vivent dans Qdrant / en mémoire ;
-pas de table Postgres `courses`/`chunks` pour l'audit, la suppression RGPD fine, la reprise.
-→ Persister les métadonnées d'ingestion (lié à [DATA_PRIVACY](docs/DATA_PRIVACY.md)).
+Persistées dans `chunk_meta` (`ChunkMetadataPort` + adapters in-memory/SQL, migration 0002).
+`DELETE /courses/{id}` supprime vecteurs + métadonnées (droit à l'effacement RGPD).
+*Restant* : la suppression côté Qdrant est best-effort (compte non remonté).
 
 ### 6 · Reranking
 Le retrieval hybride s'arrête à la fusion RRF ; pas de reranking cross-encoder.
@@ -72,9 +72,9 @@ Cache des **complétions LLM** (`CachingLLM`) et des **embeddings** (`CachingEmb
 place (in-memory/Redis). Reste à **mesurer le gain** sous charge réelle
 (cf. [COST](docs/COST.md), [PERFORMANCE](docs/PERFORMANCE.md)).
 
-### 11 · Compilation du graphe
-`get_assistant_orchestrator` reconstruit et `compile()` le graphe LangGraph à chaque
-requête. Coût négligeable mais évitable. → Mémoïser le graphe compilé.
+### 11 · Compilation du graphe ✅
+`get_assistant_orchestrator` est mémoïsé (`lru_cache`) : le graphe LangGraph est compilé
+une seule fois par processus (réinitialisé entre tests via le `conftest`).
 
 ## Principe
 
