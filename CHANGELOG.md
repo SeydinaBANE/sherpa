@@ -19,6 +19,8 @@ et ce projet respecte le [Semantic Versioning](https://semver.org/lang/fr/).
 - Phase 2 (agents) : `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (couche application,
   groundés via retrieval, sorties JSON validées Pydantic). Endpoints `POST /agents/quiz`,
   `/agents/study-plan`, `/agents/diagnose`. Sortie LLM invalide → `502` (`AgentOutputError`).
+- Orchestration LangGraph : `AssistantOrchestrator` (graphe routant `tutor`/`quiz`/`plan`
+  selon `classify_intent`) exposé via `POST /assistant`. Extra `agents` (`langgraph`).
 
 ## [0.1.0] - 2026-06-11
 ### Added

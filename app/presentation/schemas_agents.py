@@ -3,6 +3,7 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 from app.domain.agents import Quiz, StudyPlan, WeaknessReport
+from app.presentation.schemas import AskResponse
 
 
 class QuizRequest(BaseModel):
@@ -89,3 +90,15 @@ class WeaknessReportResponse(BaseModel):
             weak_topics=list(report.weak_topics),
             recommendation=report.recommendation,
         )
+
+
+class AssistantRequest(BaseModel):
+    course_id: str = Field(min_length=1, max_length=128)
+    message: str = Field(min_length=1, max_length=2000)
+
+
+class AssistantResponse(BaseModel):
+    intent: str
+    answer: AskResponse | None = None
+    quiz: QuizResponse | None = None
+    plan: StudyPlanResponse | None = None

@@ -12,7 +12,7 @@ from app.domain.exceptions import (
     NoRelevantContextError,
 )
 from app.infrastructure.observability.logging import configure_logging
-from app.presentation.routers import agents, health, rag
+from app.presentation.routers import agents, assistant, health, rag
 
 
 def _register_exception_handlers(app: FastAPI) -> None:
@@ -44,5 +44,6 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(rag.router)
     app.include_router(agents.router)
+    app.include_router(assistant.router)
     _register_exception_handlers(app)
     return app

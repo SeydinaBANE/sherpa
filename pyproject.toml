@@ -41,6 +41,9 @@ observability = [
     "prometheus-client>=0.21",
     "langfuse>=2.53",
 ]
+agents = [
+    "langgraph>=0.2",
+]
 dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
@@ -50,6 +53,7 @@ dev = [
     "pre-commit>=4.0",
     "bandit>=1.8",
     "types-redis>=4.6",
+    "langgraph>=0.2",
 ]
 
 [project.urls]
@@ -92,7 +96,15 @@ no_implicit_reexport = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["qdrant_client.*", "voyageai.*", "anthropic.*", "rank_bm25.*", "fitz.*", "langfuse.*"]
+module = [
+    "qdrant_client.*",
+    "voyageai.*",
+    "anthropic.*",
+    "langgraph.*",
+    "rank_bm25.*",
+    "fitz.*",
+    "langfuse.*",
+]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

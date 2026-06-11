@@ -66,6 +66,14 @@ Réponse `200` :
 > Les agents nécessitent un corpus indexé (sinon `422`) et le backend LLM `anthropic`
 > pour des sorties utiles ; une sortie LLM non conforme renvoie `502`.
 
+### `POST /assistant`
+Orchestration LangGraph : route un message libre vers l'agent adapté.
+
+`{ "course_id": "bio", "message": "Donne-moi un quiz sur la photosynthèse" }` →
+`{ "intent": "quiz", "answer": null, "quiz": {...}, "plan": null }`.
+
+`intent` ∈ `tutor` | `quiz` | `plan` ; seul le champ correspondant est renseigné.
+
 ## Codes d'erreur
 
 | Code | Signification |

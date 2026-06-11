@@ -17,11 +17,24 @@ lève `AgentOutputError` → HTTP 502.
 | `StudyPlanner` | Plan de révision jour par jour | sonnet | `POST /agents/study-plan` |
 | `WeaknessDiagnoser` | Lacunes + recommandation | opus | `POST /agents/diagnose` |
 
-## Orchestration LangGraph (prochaine itération)
+## Orchestration LangGraph
 
-La logique métier des agents étant isolée et testée, l'étape suivante est de les **câbler
-dans un graphe LangGraph** (routing + état partagé + checkpointer Postgres pour la mémoire
-étudiant). Le graphe sera un adapter d'infrastructure qui réutilise ces services tels quels.
+`AssistantOrchestrator` (`app/infrastructure/orchestration/assistant.py`) câble les agents
+dans un **graphe LangGraph** : un nœud `route` classe l'intention du message
+(`classify_intent`) puis des **arêtes conditionnelles** dispatchent vers `tutor`, `quiz` ou
+`plan`. Les nœuds réutilisent les services existants (aucune duplication de logique).
+
+```
+START → route ──(quiz)→ quiz ─┐
+              ──(plan)→ plan ─┼→ END
+              ──(tutor)→ tutor┘
+```
+
+Exposé via `POST /assistant` ; la réponse porte l'`intent` et le payload de l'agentchoisi.
+
+### Reste à faire
+- Checkpointer Postgres pour la **mémoire étudiant** (sessions, suivi des lacunes).
+- Routing d'intention par LLM (fallback sur les règles actuelles).
 
 ## Graphe (esquisse)
 

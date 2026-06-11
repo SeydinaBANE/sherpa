@@ -11,6 +11,7 @@ from app.domain.ports import EmbeddingPort, LLMPort, RetrieverPort
 from app.infrastructure.embeddings.voyage import VoyageEmbedding
 from app.infrastructure.llm.anthropic import AnthropicLLM
 from app.infrastructure.llm.echo import EchoLLM
+from app.infrastructure.orchestration.assistant import AssistantOrchestrator
 from app.infrastructure.retrieval.hybrid import HybridRetriever
 from app.infrastructure.retrieval.in_memory import InMemoryRetriever
 from app.infrastructure.retrieval.qdrant import QdrantRetriever
@@ -82,4 +83,12 @@ def get_weakness_diagnoser() -> WeaknessDiagnoser:
         model=settings.llm_model_deep,
         max_tokens=settings.max_tokens_per_request,
         top_k=settings.top_k,
+    )
+
+
+def get_assistant_orchestrator() -> AssistantOrchestrator:
+    return AssistantOrchestrator(
+        rag=get_rag_service(),
+        quiz=get_quiz_generator(),
+        planner=get_study_planner(),
     )

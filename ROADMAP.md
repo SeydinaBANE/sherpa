@@ -15,7 +15,7 @@
 
 ## Phase 2 — Agents 🔶
 - ✅ Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés, JSON validé) + endpoints.
-- ⬜ Câblage LangGraph (graphe, routing, état partagé).
+- ✅ Câblage LangGraph (`AssistantOrchestrator`, routing d'intention, endpoint `/assistant`).
 - ⬜ Mémoire étudiant persistée (checkpointer Postgres).
 
 ## Phase 3 — Evals + Observabilité ⬜

@@ -28,7 +28,8 @@ Backlog priorisé par phases (voir [ROADMAP.md](ROADMAP.md)).
 ## Phase 2 — Agents
 - [x] Agents `QuizGenerator`, `StudyPlanner`, `WeaknessDiagnoser` (services groundés + JSON validé)
 - [x] Endpoints `/agents/quiz`, `/agents/study-plan`, `/agents/diagnose`
-- [ ] Câblage LangGraph (graphe + routing + état partagé)
+- [x] Câblage LangGraph (`AssistantOrchestrator` + endpoint `/assistant`)
+- [ ] Routing d'intention par LLM (fallback règles)
 - [ ] Checkpointer Postgres + mémoire étudiant (suivi des lacunes)
 
 ## Phase 3 — Evals + Observabilité
