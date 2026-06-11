@@ -35,6 +35,7 @@ gh release create v0.3.0 --target main --title "v0.3.0" --notes "…"
 
 ## Historique
 
+- **v0.6.0** — Pipeline de déploiement Cloud Run (canary + smoke test), manifeste & smoke script (Phase 5).
 - **v0.5.0** — LLM-judge pour les évaluations, quota journalier par utilisateur (Phase 4 complète).
 - **v0.4.0** — Persistance des métadonnées de chunks, effacement RGPD (cours & étudiant), graphe mémoïsé.
 - **v0.3.0** — Cache LLM & embeddings, authentification par clé API & rate-limiting.
