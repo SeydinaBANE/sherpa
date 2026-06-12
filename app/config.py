@@ -1,7 +1,8 @@
 from enum import StrEnum
 from functools import lru_cache
+from typing import Self
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -83,13 +84,26 @@ class Settings(BaseSettings):
     breaker_failure_threshold: int = Field(default=5, ge=1)
     breaker_reset_timeout: float = Field(default=30.0, gt=0)
 
-    auth_enabled: bool = False
+    auth_enabled: bool = Field(default=False)
     api_keys: str = ""
-    rate_limit_enabled: bool = False
+    rate_limit_enabled: bool = Field(default=False)
     rate_limit_requests: int = Field(default=60, gt=0)
     rate_limit_window_seconds: int = Field(default=60, gt=0)
-    quota_enabled: bool = False
+    quota_enabled: bool = Field(default=False)
     daily_request_quota: int = Field(default=1000, gt=0)
+
+    @model_validator(mode="after")
+    def _enable_security_in_production(self) -> Self:
+        if self.env is Environment.PRODUCTION:
+            if not self.api_keys:
+                raise ValueError("SHERPA_API_KEYS must be set when env=production")
+            if not self.auth_enabled:
+                self.auth_enabled = True
+            if not self.rate_limit_enabled:
+                self.rate_limit_enabled = True
+            if not self.quota_enabled:
+                self.quota_enabled = True
+        return self
 
     @property
     def is_production(self) -> bool:

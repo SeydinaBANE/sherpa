@@ -9,6 +9,7 @@ async def test_healthz_returns_ok(client: AsyncClient) -> None:
     payload = response.json()
     assert payload["status"] == "ok"
     assert payload["environment"] == "local"
+    assert isinstance(payload["checks"], dict)
 
 
 async def test_ingest_then_ask_flow(client: AsyncClient) -> None:

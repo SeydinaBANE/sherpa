@@ -1,17 +1,20 @@
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app import __version__
-from app.config import get_settings
+from app.config import MemoryBackend, get_settings
 from app.domain.exceptions import (
     AgentOutputError,
     BudgetExceededError,
     CourseNotFoundError,
     NoRelevantContextError,
 )
-from app.infrastructure.observability.logging import configure_logging
+from app.infrastructure.observability.logging import configure_logging, get_logger
 from app.presentation.middleware import observability_middleware
 from app.presentation.routers import (
     agents,
@@ -44,6 +47,27 @@ def _register_exception_handlers(app: FastAPI) -> None:
         return JSONResponse(status_code=502, content={"detail": str(exc)})
 
 
+@asynccontextmanager
+async def _lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    settings = get_settings()
+    log = get_logger("sherpa.startup")
+
+    if settings.memory_backend is MemoryBackend.SQL:
+        import alembic.command
+        import alembic.config
+
+        cfg = alembic.config.Config("alembic.ini")
+        alembic.command.upgrade(cfg, "head")
+        log.info("database migrations applied")
+
+    yield
+
+    from app.presentation.dependencies import cleanup_backends
+
+    await cleanup_backends()
+    log.info("backends cleaned up")
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
@@ -51,6 +75,7 @@ def create_app() -> FastAPI:
         title="Sherpa",
         version=__version__,
         description="Tuteur IA pour la préparation d'examens (RAG + agents).",
+        lifespan=_lifespan,
     )
     app.middleware("http")(observability_middleware)
     protected = [Depends(require_api_key), Depends(rate_limit), Depends(enforce_quota)]
