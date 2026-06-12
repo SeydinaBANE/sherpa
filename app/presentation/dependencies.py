@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.application.agents.diagnoser import WeaknessDiagnoser
 from app.application.agents.planner import StudyPlanner
@@ -45,6 +45,15 @@ from app.infrastructure.resilience.circuit_breaker import CircuitBreaker
 from app.infrastructure.retrieval.hybrid import HybridRetriever
 from app.infrastructure.retrieval.in_memory import InMemoryRetriever
 from app.infrastructure.retrieval.qdrant import QdrantRetriever
+
+_engine: AsyncEngine | None = None
+
+
+async def cleanup_backends() -> None:
+    global _engine
+    if _engine is not None:
+        await _engine.dispose()
+        _engine = None
 
 
 def _build_embedding(settings: Settings) -> EmbeddingPort:
@@ -165,8 +174,10 @@ def get_weakness_diagnoser() -> WeaknessDiagnoser:
 
 @lru_cache(maxsize=1)
 def _get_session_factory() -> async_sessionmaker[AsyncSession]:
+    global _engine
     settings = get_settings()
-    return create_session_factory(create_engine(settings.database_url))
+    _engine = create_engine(settings.database_url)
+    return create_session_factory(_engine)
 
 
 @lru_cache(maxsize=1)

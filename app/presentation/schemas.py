@@ -9,6 +9,7 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     environment: str
+    checks: dict[str, str] = Field(default_factory=dict)
 
 
 class IngestRequest(BaseModel):
