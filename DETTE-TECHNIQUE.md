@@ -20,6 +20,23 @@ chaque évolution. Voir aussi [TODO.md](TODO.md) (backlog) et [ROADMAP.md](ROADM
 | 9 | LLM-judge présent ; RAGAS restant | 🟡 | 🟡 | partiel |
 | 10 | Cache LLM + embeddings en place | 🟢 | — | fait |
 | 11 | Graphe LangGraph compilé une fois (mémoïsé) | 🟢 | — | fait |
+| 12 | Golden set d'évaluation trop petit (2 cas) | 🟡 | 🟢 | à faire |
+| 13 | ResourceWarnings en test (socket non fermé) | 🟢 | 🟢 | à faire |
+
+## Dette résolue
+
+Les items suivants ont été corrigés et ne sont plus de la dette active :
+
+| # | Sujet | Résolu dans |
+|---|---|---|
+| A | Health check shallow — ne vérifiait aucun backend externe | PR #22 |
+| B | Pas de graceful shutdown (lifespan, dispose engines) | PR #22 |
+| C | Auth/rate-limit/quota désactivés par défaut, même en prod | PR #22 |
+| D | Migration manuelle — pas d'auto-migration au démarrage | PR #22 |
+| E | Pytest warning `asyncio_default_fixture_loop_scope` manquant | PR #23 |
+| F | `alembic.command.upgrade` synchrone bloquait l'event loop | PR #23 |
+| G | `_engines: list` accumulait des engines entre les tests | PR #23 |
+| H | Health check créait une engine éphémère à chaque appel | PR #23 |
 
 ## Détail
 
@@ -35,11 +52,12 @@ sparse du `HybridRetriever` vivent en mémoire de processus : non partagés entr
 (stateless) via `SHERPA_*_BACKEND`.
 
 ### 3 · Authentification / autorisation
-**Authentification par clé API** (`X-API-Key`) et **rate-limiting** en place (off par défaut,
-activables par config). Limites restantes : pas d'**autorisation fine** (un porteur de clé
-accède à tous les cours/étudiants ; `student_id`/`course_id` restent de confiance) ; le
-rate-limiter est **par processus** (non distribué). → RBAC + scoping des ressources + JWT,
-rate-limit partagé (Redis). Cf. [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
+**Authentification par clé API** (`X-API-Key`) et **rate-limiting** en place, activés
+automatiquement en production (`env=production`). Limites restantes : pas d'**autorisation
+fine** (un porteur de clé accède à tous les cours/étudiants ; `student_id`/`course_id`
+restent de confiance) ; le rate-limiter est **par processus** (non distribué).
+→ RBAC + scoping des ressources + JWT, rate-limit partagé (Redis).
+Cf. [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
 
 ### 4 · Budget de tokens
 `DailyTokenBudget` charge le **plafond `max_tokens`** (réservation), pas la consommation
@@ -76,6 +94,16 @@ place (in-memory/Redis). Reste à **mesurer le gain** sous charge réelle
 ### 11 · Compilation du graphe ✅
 `get_assistant_orchestrator` est mémoïsé (`lru_cache`) : le graphe LangGraph est compilé
 une seule fois par processus (réinitialisé entre tests via le `conftest`).
+
+### 12 · Golden set d'évaluation trop petit
+Seulement 2 cas de test (biology, history) dans `evals/dataset.py`. Trop faible pour
+détecter des régressions fines. → Ajouter des cas couvrant les échecs retrieval,
+les biais de format, les questions multi-sauts.
+
+### 13 · ResourceWarnings en test
+Python 3.11 + Pydantic + Protocols génère des `ResourceWarning: unclosed socket` dans
+certains tests. Le projet utilise `filterwarnings = ["error"]`, ce qui les transforme en
+erreurs. Solution : ajouter un filtre dans `pyproject.toml` ou dans `conftest.py`.
 
 ## Principe
 

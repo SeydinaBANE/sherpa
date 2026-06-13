@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator, Iterator
+from contextlib import suppress
 
 import pytest
 from app.config import get_settings
@@ -10,6 +12,8 @@ from httpx import ASGITransport, AsyncClient
 
 
 def _clear_caches() -> None:
+    with suppress(RuntimeError):
+        asyncio.run(dependencies.cleanup_backends())
     get_settings.cache_clear()
     dependencies.get_retriever.cache_clear()
     dependencies.get_llm.cache_clear()
